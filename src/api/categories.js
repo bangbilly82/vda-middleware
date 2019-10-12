@@ -1,5 +1,4 @@
-const Boom = require('@hapi/boom');
-const Utils = require('../utils/Utils');
+const CategoriesHelper = require('../helpers/categoriesHelper');
 
 module.exports = {
   name: 'categories-api',
@@ -9,6 +8,10 @@ module.exports = {
       {
         method: 'GET',
         path: '/categories',
+        options: {
+          auth: 'default',
+          description: 'Get all shop categories'
+        },
         handler: fetchShopCategories
       }
     ]);
@@ -17,7 +20,7 @@ module.exports = {
 
 const fetchShopCategories = async (request, h) => {
   try {
-    const categories = await Utils.readCategoriesJson();
+    const categories = await CategoriesHelper.getCategoryByJSON();
     return h.response(categories);
   } catch (error) {}
 };

@@ -11,7 +11,7 @@ module.exports = {
         method: 'GET',
         path: '/featured',
         options: {
-          auth: false,
+          auth: 'default',
           description: 'Get all featured products'
         },
         handler: featuredProducts
@@ -20,7 +20,7 @@ module.exports = {
         method: 'GET',
         path: '/id/{product_id}',
         options: {
-          auth: false,
+          auth: 'default',
           description: 'Get product by id',
           validate: {
             params: {

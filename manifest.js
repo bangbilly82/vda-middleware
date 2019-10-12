@@ -1,10 +1,5 @@
-const Confidence = require('confidence');
 const Glue = require('@hapi/glue');
 const Path = require('path');
-
-const criteria = {
-  env: process.env.NODE_ENV
-};
 
 const manifest = {
   server: {
@@ -19,6 +14,12 @@ const manifest = {
     plugins: [
       {
         plugin: require('inert')
+      },
+      {
+        plugin: require('@hapi/basic')
+      },
+      {
+        plugin: require('./src/authentication/auth')
       },
       {
         plugin: require('./src/api/categories'),

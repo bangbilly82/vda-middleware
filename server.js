@@ -22,7 +22,7 @@ const initServer = async () => {
     }
   });
   await server.start();
-  console.log('server running', server.info.uri);
+  console.log('server running', server.info);
 };
 
 initServer();
