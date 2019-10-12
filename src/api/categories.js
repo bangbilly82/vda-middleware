@@ -1,3 +1,4 @@
+const Boom = require('@hapi/boom');
 const Utils = require('../utils/Utils');
 
 module.exports = {

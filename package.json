@@ -5,17 +5,21 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "pm2 start server.js"
+    "dev": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@hapi/boom": "^8.0.1",
     "@hapi/glue": "^6.2.0",
+    "@hapi/good": "^8.2.4",
+    "@hapi/good-console": "^8.1.2",
+    "@hapi/good-squeeze": "^5.2.1",
     "@hapi/hapi": "^18.4.0",
     "boom": "^7.3.0",
     "confidence": "^4.0.2",
     "fs": "0.0.1-security",
+    "good-file": "^6.0.1",
     "joi": "^14.3.1",
     "nodemon": "^1.19.3",
     "uuid": "^3.3.3"
