@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const Utils = require('../utils/Utils');
 
-const productAPI = {
+module.exports = {
   name: 'product-api',
   version: '1.0.0',
   register: (server, options) => {
@@ -17,13 +17,13 @@ const productAPI = {
       },
       {
         method: 'GET',
-        path: '/by',
+        path: '/id/{product_id}',
         options: {
           auth: false,
           description: 'Get product by id',
           validate: {
-            query: {
-              id: Joi.string().required()
+            params: {
+              product_id: Joi.string().required()
             }
           }
         },
@@ -37,18 +37,20 @@ const featuredProducts = async (request, h) => {
   try {
     const featuredProducts = await Utils.readProductJson();
     return h.response(featuredProducts);
-  } catch (error) {}
+  } catch (error) {
+    return h.response(error);
+  }
 };
 
 const getProductById = async (request, h) => {
   try {
-    const product_id = request.query.id;
+    const product_id = request.params.product_id;
     const featuredProducts = await Utils.readProductJson();
-    const product = featuredProducts.filter( item => {
+    const product = featuredProducts.filter(item => {
       return item.product_id === product_id;
-    })
+    });
     return h.response(product[0]);
-  } catch (error) {}
+  } catch (error) {
+    return h.response(error);
+  }
 };
-
-module.exports = productAPI;

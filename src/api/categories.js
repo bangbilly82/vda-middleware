@@ -1,6 +1,6 @@
 const Utils = require('../utils/Utils');
 
-const categoriesAPI = {
+module.exports = {
   name: 'categories-api',
   version: '1.0.0',
   register: (server, options) => {
@@ -20,5 +20,3 @@ const fetchShopCategories = async (request, h) => {
     return h.response(categories);
   } catch (error) {}
 };
-
-module.exports = categoriesAPI;
