@@ -7,7 +7,7 @@ const criteria = {
 
 const manifest = {
   server: {
-    port: process.env.NODE_ENV || 5000
+    port: process.env.PORT || 5000
   },
   register: {
     plugins: [
