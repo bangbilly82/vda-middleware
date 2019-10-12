@@ -1,5 +1,6 @@
 const Confidence = require('confidence');
 const Glue = require('@hapi/glue');
+const Path = require('path');
 
 const criteria = {
   env: process.env.NODE_ENV
@@ -7,10 +8,18 @@ const criteria = {
 
 const manifest = {
   server: {
-    port: process.env.PORT || 5000
+    port: process.env.PORT || 5000,
+    routes: {
+      files: {
+        relativeTo: Path.join(__dirname, 'public')
+      }
+    }
   },
   register: {
     plugins: [
+      {
+        plugin: require('inert')
+      },
       {
         plugin: require('./src/api/categories'),
         routes: {
@@ -21,6 +30,12 @@ const manifest = {
         plugin: require('./src/api/product'),
         routes: {
           prefix: '/api/product'
+        }
+      },
+      {
+        plugin: require('./src/api/staticfile'),
+        routes: {
+          prefix: '/api/static/file'
         }
       }
     ]
