@@ -16,6 +16,12 @@ const manifest = {
         routes: {
           prefix: '/api/shop'
         }
+      },
+      {
+        plugin: require('./src/api/product'),
+        routes: {
+          prefix: '/api/product'
+        }
       }
     ]
   }
