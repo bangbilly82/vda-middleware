@@ -1,0 +1,19 @@
+{
+  "name": "fitco-shop-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "dev": "pm2 start server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/glue": "^6.2.0",
+    "@hapi/hapi": "^18.4.0",
+    "confidence": "^4.0.2",
+    "nodemon": "^1.19.3",
+    "uuid": "^3.3.3"
+  }
+}
