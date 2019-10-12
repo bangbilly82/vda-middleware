@@ -1,0 +1,50 @@
+[
+  {
+    "product_id": "580efed7-6e93-4b07-b526-c79a60509459",
+    "product_name": "Daily Crunch Spicy Jalapeno 90 gr",
+    "isDiscount": true,
+    "discount": 10,
+    "price": "18000",
+    "image": null
+  },
+  {
+    "product_id": "a7df6ea4-a136-409a-a315-8afdddc57cfd",
+    "product_name": "East Bali Cashew Popcorn Salted Egg",
+    "isDiscount": false,
+    "discount": null,
+    "price": "29000",
+    "image": null
+  },
+  {
+    "product_id": "4d85b416-29a3-434b-be15-4ae2b392ac38",
+    "product_name": "Daily Crunch Garlic Onion 90 gr",
+    "isDiscount": false,
+    "discount": null,
+    "price": "20000",
+    "image": null
+  },
+  {
+    "product_id": "7cdbc547-a6f3-4ffe-b898-7afc75945015",
+    "product_name": "Daily Crunch Garlic Onion 90 gr",
+    "isDiscount": false,
+    "discount": null,
+    "price": "20000",
+    "image": null
+  },
+  {
+    "product_id": "6a5f4216-1689-4a1a-aa98-f63cdf17c67c",
+    "product_name": "Daily Crunch Garlic Onion 90 gr",
+    "isDiscount": true,
+    "discount": 50,
+    "price": "20000",
+    "image": null
+  },
+  {
+    "product_id": "2a764937-929d-462b-873f-bb54935cb76e",
+    "product_name": "Daily Crunch Garlic Onion 90 gr",
+    "isDiscount": false,
+    "discount": null,
+    "price": "20000",
+    "image": null
+  }
+]

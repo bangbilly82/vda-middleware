@@ -1,4 +1,4 @@
-const uuidv4 = require('uuid/v4');
+const Utils = require('../utils/Utils');
 
 const categoriesAPI = {
   name: 'categories-api',
@@ -14,22 +14,11 @@ const categoriesAPI = {
   }
 };
 
-const fetchShopCategories = (request, h) => {
-  const categories = [
-    {
-      category_id: uuidv4(),
-      name: 'Food'
-    },
-    {
-      category_id: uuidv4(),
-      name: 'Essentials'
-    },
-    {
-      category_id: uuidv4(),
-      name: 'Active'
-    }
-  ];
-  return categories;
+const fetchShopCategories = async (request, h) => {
+  try {
+    const categories = await Utils.readCategoriesJson();
+    return h.response(categories);
+  } catch (error) {}
 };
 
 module.exports = categoriesAPI;
