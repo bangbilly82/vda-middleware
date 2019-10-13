@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "NODE_ENV=local nodemon server.js"
+    "dev": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
@@ -28,6 +28,9 @@
     "joi": "^14.3.1",
     "mysql": "^2.17.1",
     "nodemon": "^1.19.3",
+    "pino": "^5.13.4",
+    "pino-pretty": "^3.2.2",
+    "request": "^2.88.0",
     "uuid": "^3.3.3"
   }
 }

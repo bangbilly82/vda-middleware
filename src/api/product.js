@@ -1,6 +1,6 @@
-const Boom = require('@hapi/boom');
 const Joi = require('joi');
 const Utils = require('../utils/Utils');
+const ProductHelper = require('../helpers/productHelper');
 
 module.exports = {
   name: 'product-api',
@@ -31,7 +31,17 @@ module.exports = {
           }
         },
         handler: getProductById
-      }
+      },
+      {
+        method: 'GET',
+        path: '/point-booster/merchant',
+        options: {
+          auth: 'default',
+          description: 'Get all point booster merchant',
+          tags: ['api', 'Product']
+        },
+        handler: getPointBoosterMerchant
+      },
     ]);
   }
 };
@@ -53,6 +63,15 @@ const getProductById = async (request, h) => {
       return item.product_id === product_id;
     });
     return h.response(product[0]);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getPointBoosterMerchant = async (request, h) => {
+  try {
+    const boosters = await ProductHelper.getAllPointBoosterMerchant({ request });
+    return h.response(boosters);
   } catch (error) {
     return error;
   }

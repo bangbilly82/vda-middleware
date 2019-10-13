@@ -7,7 +7,7 @@ module.exports = {
     server.route([
       {
         method: 'GET',
-        path: '/categories',
+        path: '/',
         options: {
           auth: 'default',
           description: 'Get all shop categories',
