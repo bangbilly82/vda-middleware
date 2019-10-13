@@ -20,6 +20,22 @@ module.exports = {
           }
         },
         handler: getUserById
+      },
+      {
+        method: 'POST',
+        path: '/create/token',
+        options: {
+          auth: false,
+          description: 'Create user token',
+          tags: ['api', 'User'],
+          validate: {
+            payload: {
+              email: Joi.string().email().required(),
+              password: Joi.string().required()
+            }
+          }
+        },
+        handler: createUserToken
       }
     ]);
   }
@@ -30,6 +46,15 @@ const getUserById = async (request, h) => {
     const user_id = request.params.user_id;
     const user = await UserHelper.getUserDetailById({ request, id: user_id });
     return h.response(user);
+  } catch (error) {
+    return error;
+  }
+};
+
+const createUserToken = async (request, h) => {
+  try {
+    const token = await UserHelper.createUserToken({ request });
+    return h.response(token);
   } catch (error) {
     return error;
   }
