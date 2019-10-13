@@ -1,5 +1,6 @@
 const Good = require('@hapi/good');
 const Compose = require('./manifest');
+const Config = require('./config');
 
 const initServer = async () => {
   const server = await Compose();
@@ -22,7 +23,9 @@ const initServer = async () => {
     }
   });
   await server.start();
-  console.log('server running', server.info);
+  console.log('Server running on host', server.info.host);
+  console.log('Padawan API connection to host', Config.get('/padawanApi'));
+  console.log('MYSQL connection to host', Config.get('/mysqlConnection').host);
 };
 
 initServer();

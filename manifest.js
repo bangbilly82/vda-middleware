@@ -1,5 +1,15 @@
 const Glue = require('@hapi/glue');
+const Inert = require('@hapi/inert');
+const Vision = require('@hapi/vision');
 const Path = require('path');
+const HapiSwagger = require('hapi-swagger');
+const Config = require('./config');
+const Routes = require('./routes');
+
+const Swagger = {
+  plugin: HapiSwagger,
+  options: Config.get('/swaggerOptions')
+};
 
 const manifest = {
   server: {
@@ -12,33 +22,13 @@ const manifest = {
   },
   register: {
     plugins: [
-      {
-        plugin: require('inert')
-      },
-      {
-        plugin: require('@hapi/basic')
-      },
+      Inert,
+      Vision,
+      Swagger,
       {
         plugin: require('./src/authentication/auth')
       },
-      {
-        plugin: require('./src/api/categories'),
-        routes: {
-          prefix: '/api/shop'
-        }
-      },
-      {
-        plugin: require('./src/api/product'),
-        routes: {
-          prefix: '/api/product'
-        }
-      },
-      {
-        plugin: require('./src/api/staticfile'),
-        routes: {
-          prefix: '/api/static/file'
-        }
-      }
+      ...Routes
     ]
   }
 };

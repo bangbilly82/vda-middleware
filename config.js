@@ -15,6 +15,14 @@ var config = {
     local: 'https://fitco-shop-api.herokuapp.com',
     $default: 'https://fitco-shop-api.herokuapp.com'
   },
+  padawanApi: {
+    $filter: 'env',
+    production: 'https://api.fitco.id',
+    staging: 'https://staging.api.fitco.id',
+    dev: 'https://dev.api.fitco.id',
+    local: 'http://localhost:3000',
+    $default: 'http://localhost:3000'
+  },
   mysqlConnection: {
     $filter: 'env',
     production: {
@@ -52,6 +60,27 @@ var config = {
       database: 'fitco_shop',
       port: 3306
     }
+  },
+  swaggerOptions: {
+    info: {
+      title: 'FITCO SHOP API Documentation',
+      version: '1.0.0'
+    },
+    tags: [
+      {
+        name: 'Categories',
+        description: 'shop categories api'
+      },
+      {
+        name: 'Product',
+        description: 'shop product api'
+      },
+      {
+        name: 'Static File',
+        description: 'static file api'
+      }
+    ],
+    grouping: 'tags'
   }
 };
 

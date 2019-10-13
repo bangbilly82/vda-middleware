@@ -5,14 +5,15 @@ const Utils = require('../utils/Utils');
 module.exports = {
   name: 'product-api',
   version: '1.0.0',
-  register: (server, options) => {
+  register: server => {
     server.route([
       {
         method: 'GET',
         path: '/featured',
         options: {
           auth: 'default',
-          description: 'Get all featured products'
+          description: 'Get all featured products',
+          tags: ['api', 'Product']
         },
         handler: featuredProducts
       },
@@ -22,6 +23,7 @@ module.exports = {
         options: {
           auth: 'default',
           description: 'Get product by id',
+          tags: ['api', 'Product'],
           validate: {
             params: {
               product_id: Joi.string().required()
@@ -39,7 +41,7 @@ const featuredProducts = async (request, h) => {
     const featuredProducts = await Utils.readProductJson();
     return h.response(featuredProducts);
   } catch (error) {
-    return h.response(error);
+    return error;
   }
 };
 
@@ -52,6 +54,6 @@ const getProductById = async (request, h) => {
     });
     return h.response(product[0]);
   } catch (error) {
-    return h.response(error);
+    return error;
   }
 };
