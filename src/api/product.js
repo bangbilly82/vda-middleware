@@ -11,7 +11,7 @@ module.exports = {
         method: 'GET',
         path: '/featured',
         options: {
-          auth: 'default',
+          auth: 'jwt',
           description: 'Get all featured products',
           tags: ['api', 'Product']
         },
@@ -21,7 +21,7 @@ module.exports = {
         method: 'GET',
         path: '/id/{product_id}',
         options: {
-          auth: 'default',
+          auth: 'jwt',
           description: 'Get product by id',
           tags: ['api', 'Product'],
           validate: {
@@ -36,7 +36,7 @@ module.exports = {
         method: 'GET',
         path: '/point-booster/merchant',
         options: {
-          auth: 'default',
+          auth: 'jwt',
           description: 'Get all point booster merchant',
           tags: ['api', 'Product']
         },

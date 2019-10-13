@@ -33,8 +33,8 @@ var config = {
     production: 'https://api.fitco.id',
     staging: 'https://staging.api.fitco.id',
     dev: 'https://dev.api.fitco.id',
-    local: 'http://localhost:8000',
-    $default: 'http://localhost:8000'
+    local: 'https://dev.api.fitco.id',
+    $default: 'https://dev.api.fitco.id'
   },
   mysqlConnection: {
     $filter: 'env',
@@ -94,6 +94,21 @@ var config = {
       }
     ],
     grouping: 'tags'
+  },
+  secretKey: {
+    $filter: 'env',
+    production: 'fitco-prod-secret-1234',
+    staging: 'fitco-staging-secret-1234',
+    dev: 'fitco-dev-secret-1234',
+    local: 'fitcoo-local-secret-1234',
+    $default: 'fitco-local-secret-1234'
+  },
+  stubAuthToken: {
+    iss: 'fitco-app',
+    sub: 'sms|58258a8f1bea6c60b0e82483',
+    aud: 'LdzZ0UbENNMFycNgkNLhSZH4NjEiDeT0',
+    username: 'tester@fitco.id',
+    password: 'Fitco123'
   }
 };
 

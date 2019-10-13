@@ -10,7 +10,7 @@ module.exports = {
         method: 'GET',
         path: '/id/{user_id}',
         options: {
-          auth: 'default',
+          auth: 'jwt',
           description: 'Get user by id',
           tags: ['api', 'User'],
           validate: {

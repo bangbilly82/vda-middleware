@@ -9,7 +9,7 @@ module.exports = {
         method: 'GET',
         path: '/',
         options: {
-          auth: 'default',
+          auth: 'jwt',
           description: 'Get all shop categories',
           tags: ['api', 'Categories']
         },
