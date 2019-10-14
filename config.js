@@ -9,7 +9,7 @@ var config = {
   projectName: 'fitco-shop-middleware',
   staticFile: {
     $filter: 'env',
-    production: 'https://fitco-shop-api.herokuapp.com',
+    production: 'http://ec2-18-218-31-146.us-east-2.compute.amazonaws.com:5000',
     staging: 'https://fitco-shop-api.herokuapp.com',
     dev: 'https://fitco-shop-api.herokuapp.com',
     local: 'https://fitco-shop-api.herokuapp.com',

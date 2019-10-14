@@ -5,7 +5,7 @@
     "isDiscount": true,
     "discount": 10,
     "price": "18000",
-    "image": null,
+    "image": "imgDCChips02.png",
     "product_description": "Popcorn Karamel (Caramel Popcorn) dari East Bali Cashews diproses dengan seksama dan dibuat dengan 100% bahan-bahan alami dan tanpa bahan pengawet. Jangan sampai Anda lewatkan kenikmatan yang didapat dari gurihnya popcorn dan kerenyahan kacang mede panggang yang dibalut dengan manisnya karamel lembut yang lumer di mulut. Nikmati Popcorn Karamel yang bergizi tinggi ini di waktu santai Anda dengan orang terkasih! Ingredients: Kacang mede, gula tebu, popcorn, gula singkong, mentega, santan, garam laut.",
     "product_attributes": [
       {
@@ -28,7 +28,7 @@
     "isDiscount": false,
     "discount": null,
     "price": "29000",
-    "image": null,
+    "image": "imgEBCPopcorn01.png",
     "product_description": "Popcorn Karamel (Caramel Popcorn) dari East Bali Cashews diproses dengan seksama dan dibuat dengan 100% bahan-bahan alami dan tanpa bahan pengawet. Jangan sampai Anda lewatkan kenikmatan yang didapat dari gurihnya popcorn dan kerenyahan kacang mede panggang yang dibalut dengan manisnya karamel lembut yang lumer di mulut. Nikmati Popcorn Karamel yang bergizi tinggi ini di waktu santai Anda dengan orang terkasih! Ingredients: Kacang mede, gula tebu, popcorn, gula singkong, mentega, santan, garam laut.",
     "product_attributes": [
       {
@@ -51,7 +51,7 @@
     "isDiscount": false,
     "discount": null,
     "price": "20000",
-    "image": null,
+    "image": "imgDCChips01.png",
     "product_description": "Popcorn Karamel (Caramel Popcorn) dari East Bali Cashews diproses dengan seksama dan dibuat dengan 100% bahan-bahan alami dan tanpa bahan pengawet. Jangan sampai Anda lewatkan kenikmatan yang didapat dari gurihnya popcorn dan kerenyahan kacang mede panggang yang dibalut dengan manisnya karamel lembut yang lumer di mulut. Nikmati Popcorn Karamel yang bergizi tinggi ini di waktu santai Anda dengan orang terkasih! Ingredients: Kacang mede, gula tebu, popcorn, gula singkong, mentega, santan, garam laut.",
     "product_attributes": [
       {
@@ -74,7 +74,7 @@
     "isDiscount": false,
     "discount": null,
     "price": "20000",
-    "image": null,
+    "image": "imgGLChips01.png",
     "product_description": "Popcorn Karamel (Caramel Popcorn) dari East Bali Cashews diproses dengan seksama dan dibuat dengan 100% bahan-bahan alami dan tanpa bahan pengawet. Jangan sampai Anda lewatkan kenikmatan yang didapat dari gurihnya popcorn dan kerenyahan kacang mede panggang yang dibalut dengan manisnya karamel lembut yang lumer di mulut. Nikmati Popcorn Karamel yang bergizi tinggi ini di waktu santai Anda dengan orang terkasih! Ingredients: Kacang mede, gula tebu, popcorn, gula singkong, mentega, santan, garam laut.",
     "product_attributes": [
       {
@@ -97,30 +97,7 @@
     "isDiscount": true,
     "discount": 50,
     "price": "20000",
-    "image": null,
-    "product_description": "Popcorn Karamel (Caramel Popcorn) dari East Bali Cashews diproses dengan seksama dan dibuat dengan 100% bahan-bahan alami dan tanpa bahan pengawet. Jangan sampai Anda lewatkan kenikmatan yang didapat dari gurihnya popcorn dan kerenyahan kacang mede panggang yang dibalut dengan manisnya karamel lembut yang lumer di mulut. Nikmati Popcorn Karamel yang bergizi tinggi ini di waktu santai Anda dengan orang terkasih! Ingredients: Kacang mede, gula tebu, popcorn, gula singkong, mentega, santan, garam laut.",
-    "product_attributes": [
-      {
-        "attributes_name": "Weight",
-        "value": "0.37kg"
-      },
-      {
-        "attributes_name": "Dimensions",
-        "value": "15 x 9 x 24 cm"
-      },
-      {
-        "attributes_name": "Brand",
-        "value": "East Bali Cashew"
-      }
-    ]
-  },
-  {
-    "product_id": "2a764937-929d-462b-873f-bb54935cb76e",
-    "product_name": "Daily Crunch Garlic Onion 90 gr",
-    "isDiscount": false,
-    "discount": null,
-    "price": "20000",
-    "image": null,
+    "image": "imgOMGCrackers01.png",
     "product_description": "Popcorn Karamel (Caramel Popcorn) dari East Bali Cashews diproses dengan seksama dan dibuat dengan 100% bahan-bahan alami dan tanpa bahan pengawet. Jangan sampai Anda lewatkan kenikmatan yang didapat dari gurihnya popcorn dan kerenyahan kacang mede panggang yang dibalut dengan manisnya karamel lembut yang lumer di mulut. Nikmati Popcorn Karamel yang bergizi tinggi ini di waktu santai Anda dengan orang terkasih! Ingredients: Kacang mede, gula tebu, popcorn, gula singkong, mentega, santan, garam laut.",
     "product_attributes": [
       {

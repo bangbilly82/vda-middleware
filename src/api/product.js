@@ -48,7 +48,7 @@ module.exports = {
 
 const featuredProducts = async (request, h) => {
   try {
-    const featuredProducts = await Utils.readProductJson();
+    const featuredProducts = await ProductHelper.getProductJSON();
     return h.response(featuredProducts);
   } catch (error) {
     return error;
