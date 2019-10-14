@@ -5,7 +5,7 @@ module.exports = {
   sign: user => {
     return Jwt.sign(user, Config.get('/secretKey'), {
       algorithm: 'HS256',
-      expiresIn: '1h'
+      expiresIn: '8h'
     });
   },
   verify: (token, callback) => {
