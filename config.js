@@ -39,23 +39,23 @@ var config = {
   mysqlConnection: {
     $filter: 'env',
     production: {
-      host: '127.0.0.1',
-      user: 'root',
-      password: 'password',
+      host: 'fitco-staging.cz8ywgnyqpoq.ap-southeast-1.rds.amazonaws.com',
+      user: 'fit2go',
+      password: '6UYNd&8xPy9pT4wq',
       database: 'fitco_shop',
       port: 3306
     },
     staging: {
-      host: '127.0.0.1',
-      user: 'root',
-      password: 'password',
+      host: 'fitco-staging.cz8ywgnyqpoq.ap-southeast-1.rds.amazonaws.com',
+      user: 'fit2go',
+      password: '6UYNd&8xPy9pT4wq',
       database: 'fitco_shop',
       port: 3306
     },
     dev: {
-      host: '127.0.0.1',
-      user: 'root',
-      password: 'password',
+      host: 'fitco-staging.cz8ywgnyqpoq.ap-southeast-1.rds.amazonaws.com',
+      user: 'fit2go',
+      password: '6UYNd&8xPy9pT4wq',
       database: 'fitco_shop',
       port: 3306
     },

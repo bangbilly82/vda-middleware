@@ -21,7 +21,7 @@ module.exports = {
 
 const fetchShopCategories = async (request, h) => {
   try {
-    const categories = await CategoriesHelper.getCategoryByJSON();
+    const categories = await CategoriesHelper.getCategories();
     return h.response(categories);
   } catch (error) {
     return error;
