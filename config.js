@@ -53,9 +53,9 @@ var config = {
       port: 3306
     },
     dev: {
-      host: 'fitco-staging.cz8ywgnyqpoq.ap-southeast-1.rds.amazonaws.com',
-      user: 'fit2go',
-      password: '6UYNd&8xPy9pT4wq',
+      host: 'twentyfitdevelopment.cz8ywgnyqpoq.ap-southeast-1.rds.amazonaws.com',
+      user: 'fitcodev',
+      password: 'zb38v5FpAY',
       database: 'fitco_shop',
       port: 3306
     },
