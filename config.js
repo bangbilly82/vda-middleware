@@ -9,11 +9,11 @@ var config = {
   projectName: 'fitco-shop-middleware',
   staticFile: {
     $filter: 'env',
-    production: 'http://ec2-18-218-31-146.us-east-2.compute.amazonaws.com:5000',
-    staging: 'https://fitco-shop-api.herokuapp.com',
-    dev: 'https://fitco-shop-api.herokuapp.com',
-    local: 'https://fitco-shop-api.herokuapp.com',
-    $default: 'https://fitco-shop-api.herokuapp.com'
+    production: 'https://shop.api.fitco.id',
+    staging: 'https://staging.shop.api.fitco.id',
+    dev: 'https://dev.shop.api.fitco.id',
+    local: 'http://localhost:5000',
+    $default: 'http://localhost:5000'
   },
   bearerToken: {
     $filter: 'env',
