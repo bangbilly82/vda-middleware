@@ -2,6 +2,7 @@ const Config = require('../../config');
 const Padawan = require('../services/padawan');
 const Utils = require('../utils/Utils');
 const host = Config.get('/staticFile');
+const _ = require('lodash');
 
 const getAllPointBoosterMerchant = ({ request }) => {
   return new Promise((resolve, reject) => {
@@ -12,6 +13,20 @@ const getAllPointBoosterMerchant = ({ request }) => {
         return;
       }
       resolve(payload);
+    });
+  });
+};
+
+const getProductById = id => {
+  return new Promise((resolve, reject) => {
+    Utils.readProductJson().then(results => {
+      const product = results.filter(item => {
+        return item.product_id === id;
+      });
+      _.extend(product[0], {
+        image_url: `${host}/api/static/file/image/${product[0].image}`
+      });
+      resolve(product[0]);
     });
   });
 };
@@ -33,5 +48,6 @@ const getProductJSON = () => {
 
 module.exports = {
   getAllPointBoosterMerchant,
-  getProductJSON
+  getProductJSON,
+  getProductById
 };
