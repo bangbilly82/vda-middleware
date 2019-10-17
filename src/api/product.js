@@ -58,11 +58,8 @@ const featuredProducts = async (request, h) => {
 const getProductById = async (request, h) => {
   try {
     const product_id = request.params.product_id;
-    const featuredProducts = await Utils.readProductJson();
-    const product = featuredProducts.filter(item => {
-      return item.product_id === product_id;
-    });
-    return h.response(product[0]);
+    const product = await ProductHelper.getProductById(product_id);
+    return h.response(product);
   } catch (error) {
     return error;
   }
