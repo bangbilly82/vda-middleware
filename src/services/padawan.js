@@ -49,12 +49,16 @@ const parseResponse = (error, response, body, callback) => {
   }
 };
 
-const callAPI = (request, method, url, callback) => {
+const callAPI = (request, method, url, options, callback) => {
   Logger.info(`[PADAWAN API] Established ${method} connection to`, url);
-  Request(request, method, defaultOptions, url, (error, response, body) => {
+  const extendedOptions = options
+    ? { ...defaultOptions, ...options }
+    : defaultOptions;
+  Request(request, method, extendedOptions, url, (error, response, body) => {
     parseResponse(error, response, body, callback);
   });
 };
+
 
 const getAllPointBoosterMerchant = (request, callback) => {
   callAPI(request, 'GET', getBaseUrl('point-booster-all-merchant'), {}, callback);
