@@ -9,8 +9,6 @@ const endpointRoute = {
   'point-booster-all-merchant': '/point-booster/list/merchant',
   'user-detail': '/v2/user/details/',
   'user-login': '/user/login',
-  'food-list': '/eat/foodlist',
-  'food-list-schedule': '/eat/catering-schedule/foodlist/',
   'food-detail': '/eat/food/details/'
 };
 
@@ -81,14 +79,6 @@ const loginUser = (request, callback) => {
   callAPI(request, 'POST', getBaseUrl('user-login'), payload, callback);
 };
 
-const getAllFood = (request, callback) => {
-  callAPI(request, 'GET', getBaseUrl('food-list'), {}, callback);
-};
-
-const getFoodListSchedule = (id, request, callback) => {
-  callAPI(request, 'GET', getBaseUrl('food-list-schedule') + id, {}, callback);
-};
-
 const getFoodDetail = (id, request, callback) => {
   callAPI(request, 'GET', getBaseUrl('food-detail') + id, {}, callback);
 };
@@ -97,7 +87,5 @@ module.exports = {
   getAllPointBoosterMerchant,
   getUserDetailById,
   loginUser,
-  getAllFood,
-  getFoodListSchedule,
   getFoodDetail
 };
