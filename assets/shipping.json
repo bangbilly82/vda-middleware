@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "GOSEND",
+    "icon": "gosend",
+    "service": "Same Day Delivery",
+    "deliveryFee": 20000,
+    "selected": true
+  },
+  {
+    "id": 2,
+    "name": "JNE",
+    "icon": "jne",
+    "service": "",
+    "deliveryFee": 15000,
+    "selected": false
+  },
+  {
+    "id": 3,
+    "name": "SI CEPAT",
+    "icon": "sicepat",
+    "service": "",
+    "deliveryFee": 18000,
+    "selected": false
+  }
+]
