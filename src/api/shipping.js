@@ -22,14 +22,8 @@ module.exports = {
 
 const shippingHandler = async (request, h) => {
   try {
-    let session = request.state.session;
-    if (!session) {
-      session = { user: 'joe' };
-    }
-
-    session.last = Date.now();
     const shipping = await Utils.readShippingJson();
-    return h.response(shipping).state('session', session);
+    return h.response(shipping);
   } catch (error) {
     return error;
   }
