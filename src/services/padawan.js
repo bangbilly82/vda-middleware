@@ -7,7 +7,11 @@ const Config = require('../../config');
 
 const endpointRoute = {
   'point-booster-all-merchant': '/point-booster/list/merchant',
-  'user-detail': '/v2/user/details/'
+  'user-detail': '/v2/user/details/',
+  'user-login': '/user/login',
+  'food-list': '/eat/foodlist',
+  'food-list-schedule': '/eat/catering-schedule/foodlist/',
+  'food-detail': '/eat/food/details/'
 };
 
 const defaultHeaders = {
@@ -53,14 +57,43 @@ const callAPI = (request, method, url, callback) => {
 };
 
 const getAllPointBoosterMerchant = (request, callback) => {
-  callAPI(request, 'GET', getBaseUrl('point-booster-all-merchant'), callback);
+  callAPI(request, 'GET', getBaseUrl('point-booster-all-merchant'), {}, callback);
 };
 
 const getUserDetailById = (id, request, callback) => {
-  callAPI(request, 'GET', getBaseUrl('user-detail') + id, callback);
+  callAPI(request, 'GET', getBaseUrl('user-detail') + id, {}, callback);
+};
+
+const loginUser = (request, callback) => {
+  const body = {
+    data: {
+      username: request.payload.data.username,
+      password: request.payload.data.password
+    }
+  };
+  const payload = {
+    body: JSON.stringify(body)
+  };
+  callAPI(request, 'POST', getBaseUrl('user-login'), payload, callback);
+};
+
+const getAllFood = (request, callback) => {
+  callAPI(request, 'GET', getBaseUrl('food-list'), {}, callback);
+};
+
+const getFoodListSchedule = (id, request, callback) => {
+  callAPI(request, 'GET', getBaseUrl('food-list-schedule') + id, {}, callback);
+};
+
+const getFoodDetail = (id, request, callback) => {
+  callAPI(request, 'GET', getBaseUrl('food-detail') + id, {}, callback);
 };
 
 module.exports = {
   getAllPointBoosterMerchant,
-  getUserDetailById
+  getUserDetailById,
+  loginUser,
+  getAllFood,
+  getFoodListSchedule,
+  getFoodDetail
 };
