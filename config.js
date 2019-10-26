@@ -11,7 +11,7 @@ var config = {
     $filter: 'env',
     production: 'https://shop.api.fitco.id',
     staging: 'https://staging.shop.api.fitco.id',
-    dev: 'http://localhost:5000',
+    dev: 'https://dev.shop.api.fitco.id',
     local: 'http://localhost:5000',
     $default: 'http://localhost:5000'
   },
@@ -115,7 +115,7 @@ var config = {
     $filter: 'env',
     production: 'https://fitmart.co.id/',
     staging: 'https://fitmart.co.id/',
-    dev: 'http://localhost:8000',
+    dev: 'https://fitmart.co.id/',
     local: 'http://localhost:8000',
     $default: 'http://localhost:8000'
   },
