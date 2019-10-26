@@ -12,6 +12,7 @@ const initServer = async () => {
   Logger.info('[PADAWAN-API] connection to host', Config.get('/padawanApi'));
   Logger.info(`[MYSQL-DB] connection to host ${Config.get('/mysqlConnection').host} port ${Config.get('/mysqlConnection').port}`);
   Logger.info('[STATIC-FILE] connection to host', Config.get('/staticFile'));
+  Logger.info('[FITMART] connection to host', Config.get('/fitmartHost'));
 };
 
 initServer();
