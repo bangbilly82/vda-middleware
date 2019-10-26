@@ -53,7 +53,8 @@ var config = {
       port: 3306
     },
     dev: {
-      host: 'twentyfitdevelopment.cz8ywgnyqpoq.ap-southeast-1.rds.amazonaws.com',
+      host:
+        'twentyfitdevelopment.cz8ywgnyqpoq.ap-southeast-1.rds.amazonaws.com',
       user: 'fitcodev',
       password: 'zb38v5FpAY',
       database: 'fitco_shop',
@@ -109,6 +110,37 @@ var config = {
     aud: 'LdzZ0UbENNMFycNgkNLhSZH4NjEiDeT0',
     username: 'tester@fitco.id',
     password: 'Fitco123'
+  },
+  fitmartHost: {
+    $filter: 'env',
+    production: 'https://fitmart.co.id/',
+    staging: 'https://fitmart.co.id/',
+    dev: 'https://fitmart.co.id/',
+    local: 'http://localhost:8000',
+    $default: 'http://localhost:8000'
+  },
+  fitmartApiKey: {
+    $filter: 'env',
+    production: {
+      consumerKey: 'ck_4b74e619f040bae0e7839069d7b7a9822066baad',
+      consumerSecret: 'cs_038c5c2796a0e1428c3eeb6c582f9d551c3fa9cb'
+    },
+    staging: {
+      consumerKey: 'ck_2dcd27b4dfd239d3350b3187fa6881ee04e8eb99',
+      consumerSecret: 'cs_0ebf9ba06004ce26534e0b2b7705d0800e619039'
+    },
+    dev: {
+      consumerKey: 'ck_2dcd27b4dfd239d3350b3187fa6881ee04e8eb99',
+      consumerSecret: 'cs_0ebf9ba06004ce26534e0b2b7705d0800e619039'
+    },
+    local: {
+      consumerKey: 'ck_2dcd27b4dfd239d3350b3187fa6881ee04e8eb99',
+      consumerSecret: 'cs_0ebf9ba06004ce26534e0b2b7705d0800e619039'
+    },
+    $default: {
+      consumerKey: 'ck_2dcd27b4dfd239d3350b3187fa6881ee04e8eb99',
+      consumerSecret: 'cs_0ebf9ba06004ce26534e0b2b7705d0800e619039'
+    }
   }
 };
 

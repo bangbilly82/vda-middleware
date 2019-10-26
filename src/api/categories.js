@@ -9,19 +9,19 @@ module.exports = {
         method: 'GET',
         path: '/',
         options: {
-          auth: 'jwt',
+          auth: 'guestAuth',
           description: 'Get all shop categories',
           tags: ['api', 'Categories']
         },
-        handler: fetchShopCategories
+        handler: getAllFitmartCategories
       }
     ]);
   }
 };
 
-const fetchShopCategories = async (request, h) => {
+const getAllFitmartCategories = async (request, h) => {
   try {
-    const categories = await CategoriesHelper.getCategories();
+    const categories = await CategoriesHelper.getAllCategories();
     return h.response(categories);
   } catch (error) {
     return error;

@@ -1,4 +1,4 @@
-const EatHelper = require('../helpers/EatHelper');
+const EatHelper = require('../helpers/eatHelper');
 
 module.exports = {
   name: 'eat-api',
