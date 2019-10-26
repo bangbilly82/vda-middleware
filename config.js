@@ -126,12 +126,12 @@ var config = {
       consumerSecret: 'cs_038c5c2796a0e1428c3eeb6c582f9d551c3fa9cb'
     },
     staging: {
-      consumerKey: 'ck_2dcd27b4dfd239d3350b3187fa6881ee04e8eb99',
-      consumerSecret: 'cs_0ebf9ba06004ce26534e0b2b7705d0800e619039'
+      consumerKey: 'ck_4b74e619f040bae0e7839069d7b7a9822066baad',
+      consumerSecret: 'cs_038c5c2796a0e1428c3eeb6c582f9d551c3fa9cb'
     },
     dev: {
-      consumerKey: 'ck_2dcd27b4dfd239d3350b3187fa6881ee04e8eb99',
-      consumerSecret: 'cs_0ebf9ba06004ce26534e0b2b7705d0800e619039'
+      consumerKey: 'ck_4b74e619f040bae0e7839069d7b7a9822066baad',
+      consumerSecret: 'cs_038c5c2796a0e1428c3eeb6c582f9d551c3fa9cb'
     },
     local: {
       consumerKey: 'ck_2dcd27b4dfd239d3350b3187fa6881ee04e8eb99',
