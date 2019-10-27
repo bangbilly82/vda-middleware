@@ -5,6 +5,8 @@ stages:
 
 deploy-development:
   stage: deploy-development
+  tags:
+    - fitco-shop-middleware-runner
   type: deploy
   environment: development
   script:
