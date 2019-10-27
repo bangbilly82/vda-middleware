@@ -141,6 +141,29 @@ var config = {
       consumerKey: 'ck_2dcd27b4dfd239d3350b3187fa6881ee04e8eb99',
       consumerSecret: 'cs_0ebf9ba06004ce26534e0b2b7705d0800e619039'
     }
+  },
+  rajaOngkir: {
+    $filter: 'env',
+    production: {
+      host: 'https://api.rajaongkir.com/starter',
+      apiKey: 'bef633a7aec9fe973400bcdfea287d35'
+    },
+    staging: {
+      host: 'https://api.rajaongkir.com/starter',
+      apiKey: 'bef633a7aec9fe973400bcdfea287d35'
+    },
+    dev: {
+      host: 'https://api.rajaongkir.com/starter',
+      apiKey: 'bef633a7aec9fe973400bcdfea287d35'
+    },
+    local: {
+      host: 'https://api.rajaongkir.com/starter',
+      apiKey: 'bef633a7aec9fe973400bcdfea287d35'
+    },
+    $default: {
+      host: 'https://api.rajaongkir.com/starter',
+      apiKey: 'bef633a7aec9fe973400bcdfea287d35'
+    }
   }
 };
 

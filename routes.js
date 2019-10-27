@@ -34,5 +34,11 @@ module.exports = [
     routes: {
       prefix: '/api/eat'
     }
+  },
+  {
+    plugin: require('./src/api/media'),
+    routes: {
+      prefix: '/api/shop/media'
+    }
   }
 ];

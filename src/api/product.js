@@ -70,6 +70,16 @@ module.exports = {
           tags: ['api', 'Product']
         },
         handler: getAllAvailableCoupons
+      },
+      {
+        method: 'GET',
+        path: '/search',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get all matching product by search query',
+          tags: ['api', 'Product']
+        },
+        handler: searchByCriteria
       }
     ]);
   }
@@ -126,6 +136,16 @@ const getAllAvailableCoupons = async (request, h) => {
   try {
     const couponse = await ProductHelper.getAllAvailableCoupons();
     return h.response(couponse);
+  } catch (error) {
+    return error;
+  }
+};
+
+const searchByCriteria = async (request, h) => {
+  try {
+    const query = request.query.query;
+    const response = await ProductHelper.searchByCriteria(query);
+    return h.response(response);
   } catch (error) {
     return error;
   }

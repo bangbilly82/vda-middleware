@@ -4,6 +4,7 @@ const Utils = require('../utils/Utils');
 const host = Config.get('/staticFile');
 const _ = require('lodash');
 const Fitmart = require('../services/fitmart');
+const WP = require('../services/wp');
 
 const CATEGORY_MAPPING = {
   flashsale: 102,
@@ -102,6 +103,14 @@ const getAllAvailableCoupons = () => {
   });
 };
 
+const searchByCriteria = query => {
+  return new Promise((resolve, reject) => {
+    WP.searchByCriteria(query).then(response => {
+      resolve(response);
+    });
+  });
+};
+
 module.exports = {
   getAllPointBoosterMerchant,
   getProductJSON,
@@ -111,5 +120,6 @@ module.exports = {
   getAllFitmartPayments,
   getAllShippingMethods,
   proceedOrder,
-  getAllAvailableCoupons
+  getAllAvailableCoupons,
+  searchByCriteria
 };
