@@ -2,8 +2,15 @@ image: davidalfasunarna/aws-eb-cli-nodejs:latest
 
 stages:
   - deploy-development
+  - deploy-staging
+  - deploy-master
 
 before_script:
+  - mkdir ~/.aws/
+  - touch ~/.aws/credentials
+  - printf "[ebadminfitco]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+  - touch ~/.aws/config
+  - printf "[profile ebadminfitco]\nregion=ap-southeast-1\noutput=json" >> ~/.aws/config
   - npm install
 
 deploy-development:
@@ -13,11 +20,29 @@ deploy-development:
   type: deploy
   environment: development
   script:
-  - mkdir ~/.aws/
-  - touch ~/.aws/credentials
-  - printf "[ebadminfitco]\naws_access_key_id = %s\naws_secret_access_key = %s\n" "$AWS_ACCESS_KEY_ID" "$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
-  - touch ~/.aws/config
-  - printf "[profile ebadminfitco]\nregion=ap-southeast-1\noutput=json" >> ~/.aws/config
   - eb deploy r2-d2-shop-api-dev
   only:
   - development
+
+deploy-staging:
+  stage: deploy-staging
+  tags:
+    - fitco-shop-middleware-runner
+  type: deploy
+  environment: staging
+  script:
+  - eb deploy r2-d2-shop-api-staging
+  only:
+  - staging
+
+deploy-master:
+  stage: deploy-master
+  tags:
+    - fitco-shop-middleware-runner
+  type: deploy
+  environment: master
+  script:
+  - eb deploy r2-d2-shop-api
+  when: manual
+  only:
+  - master
