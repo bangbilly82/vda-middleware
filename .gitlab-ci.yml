@@ -1,10 +1,9 @@
-image: meixnertobias/dockerpipawscli
+image: davidalfasunarna/aws-eb-cli-nodejs:latest
 
 stages:
   - deploy-development
 
 before_script:
-  - apk update && apk add nodejs
   - npm install
 
 deploy-development:
