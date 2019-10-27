@@ -3,6 +3,7 @@ const Config = require('../../config');
 const CategoriesModel = require('../models/categoriesModel');
 const Utils = require('../utils/Utils');
 const host = Config.get('/staticFile');
+const Fitmart = require('../services/fitmart');
 
 const getCategories = () => {
   return new Promise((resolve, reject) => {
@@ -50,8 +51,20 @@ const getCategoryByJSON = () => {
   });
 };
 
+const getAllCategories = () => {
+  return new Promise((resolve, reject) => {
+    Fitmart.getAllCategories().then(response => {
+      const categories = response.filter(item => {
+        return item.slug !== 'uncategorized'
+      });
+      resolve(categories);
+    });
+  });
+};
+
 module.exports = {
   getCategories,
   getCategoryById,
-  getCategoryByJSON
+  getCategoryByJSON,
+  getAllCategories
 };

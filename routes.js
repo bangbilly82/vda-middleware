@@ -22,5 +22,17 @@ module.exports = [
     routes: {
       prefix: '/api/static/file'
     }
+  },
+  {
+    plugin: require('./src/api/shipping'),
+    routes: {
+      prefix: '/api/shipping'
+    }
+  },
+  {
+    plugin: require('./src/api/eat'),
+    routes: {
+      prefix: '/api/eat'
+    }
   }
 ];
