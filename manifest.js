@@ -6,6 +6,7 @@ const Path = require('path');
 const HapiSwagger = require('hapi-swagger');
 const Config = require('./config');
 const Routes = require('./routes');
+const PostAuthHandler = require('./src/plugins/postAuthHandler');
 
 const Swagger = {
   plugin: HapiSwagger,
@@ -20,7 +21,7 @@ const Logger = {
         {
           module: '@hapi/good-squeeze',
           name: 'Squeeze',
-          args: [{ log: '*', response: '*' }]
+          args: [{ log: '*', response: '*', error: '*' }]
         },
         {
           module: '@hapi/good-console'
@@ -39,6 +40,10 @@ const Auth = {
   plugin: require('./src/authentication/auth')
 };
 
+const GuestAuth = {
+  plugin: require('./src/authentication/guest')
+}
+
 const manifest = {
   server: {
     port: process.env.PORT || 5000,
@@ -49,7 +54,7 @@ const manifest = {
     }
   },
   register: {
-    plugins: [Inert, Vision, Swagger, Logger, HapiAuthJWT, Auth, ...Routes]
+    plugins: [Inert, Vision, Swagger, Logger, HapiAuthJWT, Auth, GuestAuth, PostAuthHandler, ...Routes]
   }
 };
 

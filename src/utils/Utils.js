@@ -2,6 +2,7 @@ const Fs = require('fs');
 const Path = require('path');
 const PRODUCTS = Path.join(__dirname, '../../assets/products.json');
 const CATEGORIES = Path.join(__dirname, '../../assets/categories.json');
+const SHIPPING = Path.join(__dirname, '../../assets/shipping.json');
 
 const readFile = file => {
   return new Promise(function(resolve, reject) {
@@ -32,7 +33,16 @@ const readCategoriesJson = () => {
   });
 };
 
+const readShippingJson = () => {
+  return new Promise((resolve, reject) => {
+    return readFile(SHIPPING).then(response => {
+      resolve(response);
+    });
+  });
+};
+
 module.exports = {
   readProductJson,
-  readCategoriesJson
+  readCategoriesJson,
+  readShippingJson
 };

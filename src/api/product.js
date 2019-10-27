@@ -1,5 +1,4 @@
 const Joi = require('joi');
-const Utils = require('../utils/Utils');
 const ProductHelper = require('../helpers/productHelper');
 
 module.exports = {
@@ -9,20 +8,20 @@ module.exports = {
     server.route([
       {
         method: 'GET',
-        path: '/featured',
+        path: '/{category_name?}',
         options: {
-          auth: 'jwt',
-          description: 'Get all featured products',
+          auth: 'guestAuth',
+          description: 'Get all products from fitmart',
           tags: ['api', 'Product']
         },
-        handler: featuredProducts
+        handler: getAllFitmartProducts
       },
       {
         method: 'GET',
         path: '/id/{product_id}',
         options: {
-          auth: 'jwt',
-          description: 'Get product by id',
+          auth: 'guestAuth',
+          description: 'Get fitmart product by id',
           tags: ['api', 'Product'],
           validate: {
             params: {
@@ -30,48 +29,103 @@ module.exports = {
             }
           }
         },
-        handler: getProductById
+        handler: getFitmartProductById
       },
       {
         method: 'GET',
-        path: '/point-booster/merchant',
+        path: '/payments',
         options: {
-          auth: 'jwt',
-          description: 'Get all point booster merchant',
+          auth: 'guestAuth',
+          description: 'Get all payments from fitmart',
           tags: ['api', 'Product']
         },
-        handler: getPointBoosterMerchant
+        handler: getAllFitmartPayments
       },
+      {
+        method: 'GET',
+        path: '/shippings',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get all shippings method from fitmart',
+          tags: ['api', 'Product']
+        },
+        handler: getAllShippingMethods
+      },
+      {
+        method: 'POST',
+        path: '/orders',
+        options: {
+          auth: 'guestAuth',
+          description: 'Post orders',
+          tags: ['api', 'Product']
+        },
+        handler: proceedOrder
+      },
+      {
+        method: 'GET',
+        path: '/coupons',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get all available coupons',
+          tags: ['api', 'Product']
+        },
+        handler: getAllAvailableCoupons
+      }
     ]);
   }
 };
 
-const featuredProducts = async (request, h) => {
+const getAllFitmartProducts = async (request, h) => {
   try {
-    const featuredProducts = await ProductHelper.getProductJSON();
-    return h.response(featuredProducts);
+    const category = request.params.category_name;
+    const products = await ProductHelper.getAllFitmartProducts(category);
+    return h.response(products);
   } catch (error) {
     return error;
   }
 };
 
-const getProductById = async (request, h) => {
+const getFitmartProductById = async (request, h) => {
   try {
     const product_id = request.params.product_id;
-    const featuredProducts = await Utils.readProductJson();
-    const product = featuredProducts.filter(item => {
-      return item.product_id === product_id;
-    });
-    return h.response(product[0]);
+    const product = await ProductHelper.getFitmartProductById(product_id);
+    return h.response(product);
   } catch (error) {
     return error;
   }
 };
 
-const getPointBoosterMerchant = async (request, h) => {
+const getAllFitmartPayments = async (request, h) => {
   try {
-    const boosters = await ProductHelper.getAllPointBoosterMerchant({ request });
-    return h.response(boosters);
+    const payments = await ProductHelper.getAllFitmartPayments();
+    return h.response(payments);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getAllShippingMethods = async (request, h) => {
+  try {
+    const shippings = await ProductHelper.getAllShippingMethods();
+    return h.response(shippings);
+  } catch (error) {
+    return error;
+  }
+};
+
+const proceedOrder = async (request, h) => {
+  try {
+    const orders = await ProductHelper.proceedOrder({ request });
+    return h.response(orders);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getAllAvailableCoupons = async (request, h) => {
+  try {
+    const couponse = await ProductHelper.getAllAvailableCoupons();
+    return h.response(couponse);
   } catch (error) {
     return error;
   }
