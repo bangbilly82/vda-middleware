@@ -4,7 +4,7 @@ stages:
   - deploy-development
 
 before_script:
-  - apk add --update nodejs nodejs-npm
+  - apk add --update nodejs npm
   - npm install
 
 deploy-development:
