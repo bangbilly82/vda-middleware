@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const ProductHelper = require('../helpers/productHelper');
+const CategoriesHelper = require('../helpers/categoriesHelper');
 
 module.exports = {
   name: 'product-api',
@@ -70,6 +71,16 @@ module.exports = {
           tags: ['api', 'Product']
         },
         handler: getAllAvailableCoupons
+      },
+      {
+        method: 'GET',
+        path: '/search',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get all matching product by search query',
+          tags: ['api', 'Product']
+        },
+        handler: searchByCriteria
       }
     ]);
   }
@@ -78,7 +89,15 @@ module.exports = {
 const getAllFitmartProducts = async (request, h) => {
   try {
     const category = request.params.category_name;
-    const products = await ProductHelper.getAllFitmartProducts(category);
+    let categories = [];
+    if (category) {
+      categories = await CategoriesHelper.getAllCategories();
+      // find categories ID
+      categories = categories.filter(item => {
+        return item.slug.toLowerCase() === category.toLowerCase();
+      })
+    }
+    const products = await ProductHelper.getAllFitmartProducts(category && categories[0].id);
     return h.response(products);
   } catch (error) {
     return error;
@@ -126,6 +145,16 @@ const getAllAvailableCoupons = async (request, h) => {
   try {
     const couponse = await ProductHelper.getAllAvailableCoupons();
     return h.response(couponse);
+  } catch (error) {
+    return error;
+  }
+};
+
+const searchByCriteria = async (request, h) => {
+  try {
+    const query = request.query.query;
+    const response = await ProductHelper.searchByCriteria(query);
+    return h.response(response);
   } catch (error) {
     return error;
   }
