@@ -9,7 +9,8 @@ const Config = require('../../config');
 const endpointRoute = {
   province: '/province',
   city: '/city',
-  cost: '/cost'
+  cost: '/cost',
+  subdistrict: '/subdistrict'
 };
 
 const defaultHeaders = {
@@ -69,20 +70,21 @@ const getAllCity = (request, callback) => {
 };
 
 const getCost = (request, callback) => {
-  const body = {
-    origin: request.payload.origin,
-    destination: request.payload.destination,
-    weight: request.payload.weight,
-    courier: request.payload.courier
-  };
   const payload = {
-    form: body
+    form: { ...request.payload }
   };
   callAPI(request, 'POST', getBaseUrl('cost'), payload, callback);
+};
+
+const getAllDistrict = (request, callback) => {
+  const query = QueryString.stringify(request.query);
+  const baseUrl = getBaseUrl('subdistrict') + (query ? `?${query}` : '');
+  callAPI(request, 'GET', baseUrl, {}, callback);
 };
 
 module.exports = {
   getAllProvince,
   getAllCity,
-  getCost
+  getCost,
+  getAllDistrict
 };

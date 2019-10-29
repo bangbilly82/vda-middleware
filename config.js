@@ -145,23 +145,23 @@ var config = {
   rajaOngkir: {
     $filter: 'env',
     production: {
-      host: 'https://api.rajaongkir.com/starter',
+      host: 'https://pro.rajaongkir.com/api',
       apiKey: 'bef633a7aec9fe973400bcdfea287d35'
     },
     staging: {
-      host: 'https://api.rajaongkir.com/starter',
+      host: 'https://pro.rajaongkir.com/api',
       apiKey: 'bef633a7aec9fe973400bcdfea287d35'
     },
     dev: {
-      host: 'https://api.rajaongkir.com/starter',
+      host: 'https://pro.rajaongkir.com/api',
       apiKey: 'bef633a7aec9fe973400bcdfea287d35'
     },
     local: {
-      host: 'https://api.rajaongkir.com/starter',
+      host: 'https://pro.rajaongkir.com/api',
       apiKey: 'bef633a7aec9fe973400bcdfea287d35'
     },
     $default: {
-      host: 'https://api.rajaongkir.com/starter',
+      host: 'https://pro.rajaongkir.com/api',
       apiKey: 'bef633a7aec9fe973400bcdfea287d35'
     }
   }

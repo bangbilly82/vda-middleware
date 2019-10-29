@@ -8,7 +8,9 @@ const getAllShippingProvince = ({ request }) => {
         reject(error);
         return;
       }
-      resolve(payload);
+      if (payload.rajaongkir && payload.rajaongkir.results) {
+        resolve(payload.rajaongkir.results);
+      }
     });
   });
 };
@@ -39,8 +41,22 @@ const getCost = ({ request }) => {
   });
 };
 
+const getAllShippingDistrict = ({ request }) => {
+  return new Promise((resolve, reject) => {
+    RajaOngkir.getAllDistrict(request, (error, data) => {
+      const payload = JSON.parse(data);
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(payload);
+    });
+  });
+};
+
 module.exports = {
   getAllShippingProvince,
   getAllShippingCity,
-  getCost
+  getCost,
+  getAllShippingDistrict
 };

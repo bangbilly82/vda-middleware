@@ -54,17 +54,32 @@ module.exports = {
         options: {
           auth: 'guestAuth',
           description: 'Get all shipping cost',
+          tags: ['api', 'Shipping']
+          // validate: {
+          //   payload: {
+          //     origin: Joi.string().optional(),
+          //     destination: Joi.string().optional(),
+          //     weight: Joi.string().optional(),
+          //     courier: Joi.string().optional()
+          //   }
+          // }
+        },
+        handler: getCost
+      },
+      {
+        method: 'GET',
+        path: '/subdistrict',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get all shipping by subdistrict',
           tags: ['api', 'Shipping'],
           validate: {
-            payload: {
-              origin: Joi.string().optional(),
-              destination: Joi.string().optional(),
-              weight: Joi.string().optional(),
-              courier: Joi.string().optional()
+            query: {
+              city: Joi.string().optional()
             }
           }
         },
-        handler: getCost
+        handler: getShippingDistrict
       }
     ]);
   }
@@ -101,6 +116,15 @@ const getCost = async (request, h) => {
   try {
     const cost = await ShippingHelper.getCost({ request });
     return h.response(cost);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getShippingDistrict = async (request, h) => {
+  try {
+    const district = await ShippingHelper.getAllShippingDistrict({ request });
+    return h.response(district);
   } catch (error) {
     return error;
   }
