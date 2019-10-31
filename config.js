@@ -115,7 +115,7 @@ var config = {
     $filter: 'env',
     production: 'https://fitmart.co.id/',
     staging: 'https://fitmart.co.id/',
-    dev: 'http://18.218.31.146:8000/',
+    dev: 'https://dev.landing.fitshop.id/',
     local: 'http://localhost:8000',
     $default: 'http://localhost:8000'
   },
@@ -130,8 +130,8 @@ var config = {
       consumerSecret: 'cs_038c5c2796a0e1428c3eeb6c582f9d551c3fa9cb'
     },
     dev: {
-      consumerKey: 'ck_3f91848f3d9fa32b788f718ee3aa029ba7590579',
-      consumerSecret: 'cs_d8fe273bca872c2f616974c20b3eb14d41d356ae'
+      consumerKey: 'ck_776804829652b11dbb44c9af31a8d07e33b739e4',
+      consumerSecret: 'cs_c3b79647cc8238e3a0425895fc52c96f74ba9ed3'
     },
     local: {
       consumerKey: 'ck_2dcd27b4dfd239d3350b3187fa6881ee04e8eb99',
