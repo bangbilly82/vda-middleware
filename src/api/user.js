@@ -36,6 +36,16 @@ module.exports = {
           }
         },
         handler: createUserToken
+      },
+      {
+        method: 'GET',
+        path: '/customers',
+        options: {
+          auth: false,
+          description: 'Create new customer',
+          tags: ['api', 'User']
+        },
+        handler: getAllCustomers
       }
     ]);
   }
@@ -55,6 +65,15 @@ const createUserToken = async (request, h) => {
   try {
     const token = await UserHelper.createUserToken({ request });
     return h.response(token);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getAllCustomers = async (request, h) => {
+  try {
+    const customers = await UserHelper.getAllCustomers();
+    return h.response(customers);
   } catch (error) {
     return error;
   }

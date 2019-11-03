@@ -83,6 +83,34 @@ const getAllAvailableCoupons = () => {
   });
 };
 
+const getAllCustomers = () => {
+  return new Promise((resolve, reject) => {
+    FitmartAPI.getAsync('customers?per_page=10').then(result => {
+      parseResponse(result, data => {
+        resolve(data);
+      });
+    });
+  });
+};
+
+const getCustomerByEmail = email => {
+  return new Promise((resolve, reject) => {
+    FitmartAPI.getAsync(`customers?email=${email}`).then(result => {
+      parseResponse(result, data => {
+        resolve(data);
+      });
+    });
+  });
+};
+
+const createNewCustomer = data => {
+  return new Promise((resolve, reject) => {
+    FitmartAPI.post('customers', data, (err, result, res) => {
+      resolve(JSON.parse(res));
+    });
+  });
+};
+
 module.exports = {
   getAllProduct,
   getProductById,
@@ -90,5 +118,8 @@ module.exports = {
   getAllPayments,
   getAllShippingMethods,
   proceedOrder,
-  getAllAvailableCoupons
+  getAllAvailableCoupons,
+  getAllCustomers,
+  getCustomerByEmail,
+  createNewCustomer
 };
