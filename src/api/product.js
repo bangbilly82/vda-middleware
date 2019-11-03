@@ -134,10 +134,11 @@ const getAllShippingMethods = async (request, h) => {
 
 const proceedOrder = async (request, h) => {
   try {
-    const orders = await ProductHelper.proceedOrder({ request });
+    const validateUser = await ProductHelper.checkIfUserExist({ request });
+    const orders = await ProductHelper.proceedOrder({ request, user: validateUser.user });
     return h.response(orders);
   } catch (error) {
-    return error;
+    return h.response(error);
   }
 };
 

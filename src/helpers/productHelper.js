@@ -5,11 +5,7 @@ const host = Config.get('/staticFile');
 const _ = require('lodash');
 const Fitmart = require('../services/fitmart');
 const WP = require('../services/wp');
-
-const CATEGORY_MAPPING = {
-  flashsale: 102,
-  featured: 227
-};
+const UserHelper = require('../helpers/userHelper');
 
 const getAllPointBoosterMerchant = ({ request }) => {
   return new Promise((resolve, reject) => {
@@ -85,13 +81,40 @@ const getAllShippingMethods = () => {
   });
 };
 
-const proceedOrder = ({ request }) => {
+const proceedOrder = ({ request, user }) => {
   return new Promise((resolve, reject) => {
     const data = request.payload;
+    _.extend(data, {
+      customer_id: user.id
+    });
     Fitmart.proceedOrder(data).then(response => {
       resolve(response);
     });
   });
+};
+
+const checkIfUserExist = async ({ request }) => {
+  try {
+    const { payload } = request;
+    const email = payload.billing.email;
+    const user = await UserHelper.getAllCustomersByEmail(email);
+    if (!_.isEmpty(user)) {
+      return Promise.resolve({ request, user: user[0] });
+    } else {
+      const data = {
+        email: email,
+        first_name: payload.billing.first_name,
+        last_name: payload.billing.last_name,
+        username: email,
+        billing: { ...payload.billing },
+        shipping: { ...payload.shipping }
+      };
+      const newUser = await UserHelper.createNewCustomer(data);
+      return Promise.resolve({ request, user: newUser });
+    }
+  } catch (error) {
+    return Promise.reject(error);
+  }
 };
 
 const getAllAvailableCoupons = () => {
@@ -120,5 +143,6 @@ module.exports = {
   getAllShippingMethods,
   proceedOrder,
   getAllAvailableCoupons,
-  searchByCriteria
+  searchByCriteria,
+  checkIfUserExist
 };

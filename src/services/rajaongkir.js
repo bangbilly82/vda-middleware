@@ -32,7 +32,8 @@ const parseResponse = (error, response, body, callback) => {
   }
 
   if (response && response.statusCode == 200) {
-    callback(null, body);
+    const payload = JSON.parse(body);
+    callback(null, payload.rajaongkir.results);
   }
 
   if (response && response.statusCode == 401) {
