@@ -157,9 +157,8 @@ const searchByCriteria = async (request, h) => {
     if (query.length === 0) {
       return h.response([]);
     }
-    const products = await ProductHelper.getAllFitmartProducts();
-    const response = await ProductHelper.getAllFitmartProductsByQuery(products, query);
-    return h.response(response);
+    const products = await ProductHelper.getAllFitmartProductsByQuery(query);
+    return h.response(products);
   } catch (error) {
     return error;
   }

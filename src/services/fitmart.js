@@ -111,6 +111,17 @@ const createNewCustomer = data => {
   });
 };
 
+const getAllProductByQuery = query => {
+  return new Promise((resolve, reject) => {
+    const url = 'products?per_page=100&search=' + query;
+    FitmartAPI.getAsync(url).then(result => {
+      parseResponse(result, data => {
+        resolve(data);
+      });
+    });
+  });
+};
+
 module.exports = {
   getAllProduct,
   getProductById,
@@ -121,5 +132,6 @@ module.exports = {
   getAllAvailableCoupons,
   getAllCustomers,
   getCustomerByEmail,
-  createNewCustomer
+  createNewCustomer,
+  getAllProductByQuery
 };
