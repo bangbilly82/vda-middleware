@@ -133,6 +133,13 @@ const searchByCriteria = query => {
   });
 };
 
+const getAllFitmartProductsByQuery = (products, query) => {
+  return new Promise((resolve, reject) => {
+    const result = products.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
+    resolve(result);
+  });
+};
+
 module.exports = {
   getAllPointBoosterMerchant,
   getProductJSON,
@@ -144,5 +151,6 @@ module.exports = {
   proceedOrder,
   getAllAvailableCoupons,
   searchByCriteria,
-  checkIfUserExist
+  checkIfUserExist,
+  getAllFitmartProductsByQuery
 };
