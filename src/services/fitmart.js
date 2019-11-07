@@ -16,7 +16,7 @@ const parseResponse = (result, callback) => {
 
 const getAllProduct = category => {
   return new Promise((resolve, reject) => {
-    const url = category ? `products?category=${category}` : 'products';
+    const url = category ? `products?per_page=100&category=${category}` : 'products?per_page=100';
     FitmartAPI.getAsync(url).then(result => {
       parseResponse(result, data => {
         resolve(data);

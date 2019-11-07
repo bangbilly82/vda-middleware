@@ -154,7 +154,11 @@ const getAllAvailableCoupons = async (request, h) => {
 const searchByCriteria = async (request, h) => {
   try {
     const query = request.query.query;
-    const response = await ProductHelper.searchByCriteria(query);
+    if (query.length === 0) {
+      return h.response([]);
+    }
+    const products = await ProductHelper.getAllFitmartProducts();
+    const response = await ProductHelper.getAllFitmartProductsByQuery(products, query);
     return h.response(response);
   } catch (error) {
     return error;
