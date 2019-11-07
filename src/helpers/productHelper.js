@@ -133,10 +133,11 @@ const searchByCriteria = query => {
   });
 };
 
-const getAllFitmartProductsByQuery = (products, query) => {
+const getAllFitmartProductsByQuery = query => {
   return new Promise((resolve, reject) => {
-    const result = products.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
-    resolve(result);
+    Fitmart.getAllProductByQuery(query).then(response => {
+      resolve(response);
+    });
   });
 };
 
