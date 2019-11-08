@@ -29,7 +29,7 @@ const getAllProduct = request => {
 
 const getAllProductByCategory = categoryId => {
   return new Promise((resolve, reject) => {
-    const url = `products?category=${categoryId}`;
+    const url = `products?category=${categoryId}&per_page=5&page=1`;
     FitmartAPI.getAsync(url).then(result => {
       parseResponse(result, data => {
         resolve(data);
