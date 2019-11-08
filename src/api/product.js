@@ -91,6 +91,26 @@ module.exports = {
           tags: ['api', 'Product']
         },
         handler: searchByCriteria
+      },
+      {
+        method: 'GET',
+        path: '/retail',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get all products form DB',
+          tags: ['api', 'Product']
+        },
+        handler: getAllProductsFromDB
+      },
+      {
+        method: 'GET',
+        path: '/retail/id/{product_id}',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get products by ID form DB',
+          tags: ['api', 'Product']
+        },
+        handler: getProductsByID
       }
     ]);
   }
@@ -177,6 +197,25 @@ const searchByCriteria = async (request, h) => {
       return h.response([]);
     }
     const products = await ProductHelper.getAllFitmartProductsByQuery(query);
+    return h.response(products);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getAllProductsFromDB = async (request, h) => {
+  try {
+    const products = await ProductHelper.getProductDB();
+    return h.response(products);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getProductsByID = async (request, h) => {
+  try {
+    const id = request.params.product_id;
+    const products = await ProductHelper.getProductsByID(id);
     return h.response(products);
   } catch (error) {
     return error;
