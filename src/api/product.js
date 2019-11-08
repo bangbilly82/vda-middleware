@@ -9,13 +9,23 @@ module.exports = {
     server.route([
       {
         method: 'GET',
-        path: '/{category_name?}',
+        path: '/',
         options: {
           auth: 'guestAuth',
           description: 'Get all products from fitmart',
           tags: ['api', 'Product']
         },
         handler: getAllFitmartProducts
+      },
+      {
+        method: 'GET',
+        path: '/category/{category_name?}',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get all products by category from fitmart',
+          tags: ['api', 'Product']
+        },
+        handler: getAllFitmartProductsByCategory
       },
       {
         method: 'GET',
@@ -88,6 +98,15 @@ module.exports = {
 
 const getAllFitmartProducts = async (request, h) => {
   try {
+    const products = await ProductHelper.getAllFitmartProducts({ request });
+    return h.response(products);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getAllFitmartProductsByCategory = async (request, h) => {
+  try {
     const category = request.params.category_name;
     let categories = [];
     if (category) {
@@ -97,7 +116,7 @@ const getAllFitmartProducts = async (request, h) => {
         return item.slug.toLowerCase() === category.toLowerCase();
       })
     }
-    const products = await ProductHelper.getAllFitmartProducts(category && categories[0].id);
+    const products = await ProductHelper.getAllProductByCategory(category && categories[0].id);
     return h.response(products);
   } catch (error) {
     return error;

@@ -49,9 +49,17 @@ const getProductById = id => {
   });
 };
 
-const getAllFitmartProducts = categoryId => {
+const getAllFitmartProducts = ({ request }) => {
   return new Promise((resolve, reject) => {
-    Fitmart.getAllProduct(categoryId).then(response => {
+    Fitmart.getAllProduct(request).then(response => {
+      resolve(response);
+    });
+  });
+};
+
+const getAllProductByCategory = categoryId => {
+  return new Promise((resolve, reject) => {
+    Fitmart.getAllProductByCategory(categoryId).then(response => {
       resolve(response);
     });
   });
@@ -153,5 +161,6 @@ module.exports = {
   getAllAvailableCoupons,
   searchByCriteria,
   checkIfUserExist,
-  getAllFitmartProductsByQuery
+  getAllFitmartProductsByQuery,
+  getAllProductByCategory
 };
