@@ -1,4 +1,5 @@
 const WooCommerceAPI = require('woocommerce-api');
+const QueryString = require('query-string');
 const Config = require('../../config');
 
 const FitmartAPI = new WooCommerceAPI({
@@ -14,9 +15,21 @@ const parseResponse = (result, callback) => {
   callback(response);
 };
 
-const getAllProduct = category => {
+const getAllProduct = request => {
   return new Promise((resolve, reject) => {
-    const url = category ? `products?per_page=100&category=${category}` : 'products?per_page=100';
+    const query = QueryString.stringify(request.query);
+    const url = 'products' + (query ? `?${query}` : '');
+    FitmartAPI.getAsync(url).then(result => {
+      parseResponse(result, data => {
+        resolve(data);
+      });
+    });
+  });
+};
+
+const getAllProductByCategory = categoryId => {
+  return new Promise((resolve, reject) => {
+    const url = `products?category=${categoryId}`;
     FitmartAPI.getAsync(url).then(result => {
       parseResponse(result, data => {
         resolve(data);
@@ -133,5 +146,6 @@ module.exports = {
   getAllCustomers,
   getCustomerByEmail,
   createNewCustomer,
-  getAllProductByQuery
+  getAllProductByQuery,
+  getAllProductByCategory
 };
