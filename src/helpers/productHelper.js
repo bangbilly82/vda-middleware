@@ -6,6 +6,7 @@ const _ = require('lodash');
 const Fitmart = require('../services/fitmart');
 const WP = require('../services/wp');
 const UserHelper = require('../helpers/userHelper');
+const ProductModel = require('../models/productModel');
 
 const getAllPointBoosterMerchant = ({ request }) => {
   return new Promise((resolve, reject) => {
@@ -149,6 +150,30 @@ const getAllFitmartProductsByQuery = query => {
   });
 };
 
+const getProductDB = () => {
+  return new Promise((resolve, reject) => {
+    ProductModel.getProducts()
+      .then(results => {
+        resolve(results);
+      })
+      .catch(err => {
+        reject(Boom.badImplementation(err));
+      });
+  });
+};
+
+const getProductsByID = id => {
+  return new Promise((resolve, reject) => {
+    ProductModel.getProductsByID(id)
+      .then(results => {
+        resolve(results);
+      })
+      .catch(err => {
+        reject(Boom.badImplementation(err));
+      });
+  });
+};
+
 module.exports = {
   getAllPointBoosterMerchant,
   getProductJSON,
@@ -162,5 +187,7 @@ module.exports = {
   searchByCriteria,
   checkIfUserExist,
   getAllFitmartProductsByQuery,
-  getAllProductByCategory
+  getAllProductByCategory,
+  getProductDB,
+  getProductsByID
 };
