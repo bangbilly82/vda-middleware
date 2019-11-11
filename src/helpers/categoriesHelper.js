@@ -5,6 +5,19 @@ const Utils = require('../utils/Utils');
 const host = Config.get('/staticFile');
 const Fitmart = require('../services/fitmart');
 
+const categoryBackgroundColor = {
+  active: '#87D7EA',
+  beverage: '#A8BDEA',
+  bundling: '#CCAEEC',
+  'flash-sale': '#EAA9E9',
+  'food-beverage': '#F9B5CC',
+  'healthy-snacks': '#F5BA90',
+  'ingredients-cooking-stuff': '#A7DB9B',
+  lifestyle: '#5FEFCB',
+  nutrition: '#7FE2E8',
+  'produk-unggulan': '#B8BBF9'
+};
+
 const getCategories = () => {
   return new Promise((resolve, reject) => {
     CategoriesModel.getCategories()
@@ -55,7 +68,10 @@ const getAllCategories = () => {
   return new Promise((resolve, reject) => {
     Fitmart.getAllCategories().then(response => {
       const categories = response.filter(item => {
-        return item.slug !== 'uncategorized'
+        return item.slug !== 'uncategorized';
+      });
+      categories.map(item => {
+        item.backgroundColor = categoryBackgroundColor[item.slug.toLowerCase()];
       });
       resolve(categories);
     });
