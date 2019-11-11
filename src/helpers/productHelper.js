@@ -213,7 +213,7 @@ const getProductsByID = id => {
   return new Promise((resolve, reject) => {
     ProductModel.getProductsByID(id)
       .then(results => {
-        resolve(results);
+        resolve(results[0]);
       })
       .catch(err => {
         reject(Boom.badImplementation(err));
