@@ -215,8 +215,15 @@ const getAllProductsFromDB = async (request, h) => {
 const getProductsByID = async (request, h) => {
   try {
     const id = request.params.product_id;
-    const products = await ProductHelper.getProductsByID(id);
-    return h.response(products);
+    return Promise.all([ProductHelper.getProductsByID(id), ProductHelper.getFitmartProductById(id)]).then(products => {
+      const response = {
+        ...products[1],
+        fitco_product_detail: {
+          ...products[0]
+        }
+      }
+      return h.response(response);
+    });
   } catch (error) {
     return error;
   }

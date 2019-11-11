@@ -7,6 +7,10 @@ const Fitmart = require('../services/fitmart');
 const WP = require('../services/wp');
 const UserHelper = require('../helpers/userHelper');
 const ProductModel = require('../models/productModel');
+// const Redis = require('../services/redis');
+
+// const PRODUCT_KEY_DB_REDIS = 'db_product_redis.';
+// const PRODUCT_KEY_FITSHOP_REDIS = 'fitshop_product_redis.';
 
 const getAllPointBoosterMerchant = ({ request }) => {
   return new Promise((resolve, reject) => {
@@ -65,6 +69,25 @@ const getAllProductByCategory = categoryId => {
     });
   });
 };
+
+// const getFitmartProductById = id => {
+//   return new Promise((resolve, reject) => {
+//     Redis.getKey(PRODUCT_KEY_FITSHOP_REDIS + id, (err, value) => {
+//       if (value) {
+//         return resolve(JSON.parse(value))
+//       } else {
+//         Fitmart.getProductById(id).then(response => {
+//           const productDetailCache = JSON.stringify(response);
+//           Redis.setKey(PRODUCT_KEY_FITSHOP_REDIS + id, productDetailCache, (err, status) => {
+//             if (status) {
+//               resolve(response);
+//             }
+//           });
+//         });
+//       }
+//     })
+//   });
+// };
 
 const getFitmartProductById = id => {
   return new Promise((resolve, reject) => {
@@ -161,6 +184,30 @@ const getProductDB = () => {
       });
   });
 };
+
+// const getProductsByID = id => {
+//   return new Promise((resolve, reject) => {
+//     Redis.getKey(PRODUCT_KEY_DB_REDIS + id, (err, value) => {
+//       if (value) {
+//         const productDetail = JSON.parse(value);
+//         return resolve(productDetail[0]);
+//       } else {
+//         ProductModel.getProductsByID(id)
+//           .then(results => {
+//             const productDetailCache = JSON.stringify(results);
+//             Redis.setKey(PRODUCT_KEY_DB_REDIS + id, productDetailCache, (err, status) => {
+//               if (status) {
+//                 resolve(results[0]);
+//               }
+//             });
+//           })
+//           .catch(err => {
+//             reject(Boom.badImplementation(err));
+//           });
+//       }
+//     });
+//   });
+// };
 
 const getProductsByID = id => {
   return new Promise((resolve, reject) => {
