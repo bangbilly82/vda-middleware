@@ -27,9 +27,10 @@ const getAllProduct = request => {
   });
 };
 
-const getAllProductByCategory = categoryId => {
+const getAllProductByCategory = (categoryId, request) => {
+  const query = QueryString.stringify(request.query);
   return new Promise((resolve, reject) => {
-    const url = `products?category=${categoryId}&per_page=5&page=1`;
+    const url = 'products' + (query ? `?category=${categoryId}&${query}` : `?category=${categoryId}`);
     FitmartAPI.getAsync(url).then(result => {
       parseResponse(result, data => {
         resolve(data);
