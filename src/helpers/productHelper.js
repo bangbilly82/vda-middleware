@@ -63,9 +63,9 @@ const getAllFitmartProducts = ({ request }) => {
   });
 };
 
-const getAllProductByCategory = categoryId => {
+const getAllProductByCategory = (categoryId, request) => {
   return new Promise((resolve, reject) => {
-    Fitmart.getAllProductByCategory(categoryId).then(response => {
+    Fitmart.getAllProductByCategory(categoryId, request).then(response => {
       resolve(response);
     });
   });

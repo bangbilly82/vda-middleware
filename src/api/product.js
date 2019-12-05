@@ -151,7 +151,7 @@ const getAllFitmartProductsByCategory = async (request, h) => {
         return item.slug.toLowerCase() === category.toLowerCase();
       })
     }
-    const products = await ProductHelper.getAllProductByCategory(category && categories[0].id);
+    const products = await ProductHelper.getAllProductByCategory(category && categories[0].id, request);
     return h.response(products);
   } catch (error) {
     return error;
