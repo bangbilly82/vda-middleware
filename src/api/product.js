@@ -111,6 +111,21 @@ module.exports = {
           tags: ['api', 'Product']
         },
         handler: getProductsByID
+      },
+      {
+        method: 'GET',
+        path: '/retail/related-products',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get related products based on product ID',
+          tags: ['api', 'Product'],
+          validate: {
+            query: {
+              related_ids: Joi.string().optional()
+            }
+          }
+        },
+        handler: getRelatedProducts
       }
     ]);
   }
@@ -219,9 +234,23 @@ const getProductsByID = async (request, h) => {
       const response = {
         ...products[1],
         fitco_product_detail: {
-          ...products[0]
+          product_id: products[0].product_id
         }
       }
+      return h.response(response);
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
+const getRelatedProducts = async (request, h) => {
+  try {
+    const related_ids = request.query.related_ids;
+    const product_id_array = related_ids.split(',');
+    return Promise.all(product_id_array.map(id => {
+      return ProductHelper.getFitmartProductById(id);
+    })).then(response => {
       return h.response(response);
     });
   } catch (error) {

@@ -7,6 +7,7 @@ const Fitmart = require('../services/fitmart');
 const WP = require('../services/wp');
 const UserHelper = require('../helpers/userHelper');
 const ProductModel = require('../models/productModel');
+const Boom = require('@hapi/boom');
 // const Redis = require('../services/redis');
 
 // const PRODUCT_KEY_DB_REDIS = 'db_product_redis.';
