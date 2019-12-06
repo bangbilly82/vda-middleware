@@ -136,6 +136,17 @@ const getAllProductByQuery = query => {
   });
 };
 
+const getProductBySlug = slug => {
+  return new Promise((resolve, reject) => {
+    const url = `products?slug=${slug}`;
+    FitmartAPI.getAsync(url).then(result => {
+      parseResponse(result, data => {
+        resolve(data);
+      });
+    });
+  });
+};
+
 module.exports = {
   getAllProduct,
   getProductById,
@@ -148,5 +159,6 @@ module.exports = {
   getCustomerByEmail,
   createNewCustomer,
   getAllProductByQuery,
-  getAllProductByCategory
+  getAllProductByCategory,
+  getProductBySlug
 };
