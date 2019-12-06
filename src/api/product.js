@@ -126,6 +126,16 @@ module.exports = {
           }
         },
         handler: getRelatedProducts
+      },
+      {
+        method: 'GET',
+        path: '/retail/slug/{product_slug}',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get products by slug form fitmart',
+          tags: ['api', 'Product']
+        },
+        handler: getProductBySlug
       }
     ]);
   }
@@ -253,6 +263,16 @@ const getRelatedProducts = async (request, h) => {
     })).then(response => {
       return h.response(response);
     });
+  } catch (error) {
+    return error;
+  }
+};
+
+const getProductBySlug = async (request, h) => {
+  try {
+    const product_slug = request.params.product_slug;
+    const product = await ProductHelper.getProductBySlug(product_slug);
+    return h.response(product);
   } catch (error) {
     return error;
   }

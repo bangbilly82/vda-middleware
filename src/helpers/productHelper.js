@@ -222,6 +222,14 @@ const getProductsByID = id => {
   });
 };
 
+const getProductBySlug = slug => {
+  return new Promise((resolve, reject) => {
+    Fitmart.getProductBySlug(slug).then(response => {
+      resolve(response);
+    });
+  });
+};
+
 module.exports = {
   getAllPointBoosterMerchant,
   getProductJSON,
@@ -237,5 +245,6 @@ module.exports = {
   getAllFitmartProductsByQuery,
   getAllProductByCategory,
   getProductDB,
-  getProductsByID
+  getProductsByID,
+  getProductBySlug
 };
