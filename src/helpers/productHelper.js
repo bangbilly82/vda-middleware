@@ -230,6 +230,14 @@ const getProductBySlug = slug => {
   });
 };
 
+const getBannerJSON = () => {
+  return new Promise((resolve, reject) => {
+    Utils.readBannerJson().then(results => {
+      resolve(results);
+    });
+  });
+};
+
 module.exports = {
   getAllPointBoosterMerchant,
   getProductJSON,
@@ -246,5 +254,6 @@ module.exports = {
   getAllProductByCategory,
   getProductDB,
   getProductsByID,
-  getProductBySlug
+  getProductBySlug,
+  getBannerJSON
 };

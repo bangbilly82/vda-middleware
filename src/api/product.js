@@ -136,6 +136,16 @@ module.exports = {
           tags: ['api', 'Product']
         },
         handler: getProductBySlug
+      },
+      {
+        method: 'GET',
+        path: '/banner',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get products banner image for carousel',
+          tags: ['api', 'Product']
+        },
+        handler: getProductBanner
       }
     ]);
   }
@@ -273,6 +283,15 @@ const getProductBySlug = async (request, h) => {
     const product_slug = request.params.product_slug;
     const product = await ProductHelper.getProductBySlug(product_slug);
     return h.response(product);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getProductBanner = async (request, h) => {
+  try {
+    const banner = await ProductHelper.getBannerJSON();
+    return h.response(banner);
   } catch (error) {
     return error;
   }
