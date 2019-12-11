@@ -330,7 +330,7 @@ const validateProductStock = (request, h) => {
       })
     })).then(res => {
       const isProductNotValid = res.filter(item => {
-        return item.validate === false
+        return item.isOutOfStock === false
       })
       if (isProductNotValid.length > 0) {
         return Boom.notAcceptable('Some of product is out of stock');
