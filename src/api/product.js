@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const Boom = require('@hapi/boom');
 const ProductHelper = require('../helpers/productHelper');
 const CategoriesHelper = require('../helpers/categoriesHelper');
 
@@ -146,6 +147,21 @@ module.exports = {
           tags: ['api', 'Product']
         },
         handler: getProductBanner
+      },
+      {
+        method: 'POST',
+        path: '/validate/stock',
+        options: {
+          auth: 'guestAuth',
+          description: 'Validate product stock by ID',
+          tags: ['api', 'Product'],
+          validate: {
+            payload: {
+              cart_items: Joi.array().required()
+            }
+          }
+        },
+        handler: validateProductStock
       }
     ]);
   }
@@ -292,6 +308,35 @@ const getProductBanner = async (request, h) => {
   try {
     const banner = await ProductHelper.getBannerJSON();
     return h.response(banner);
+  } catch (error) {
+    return error;
+  }
+};
+
+const validateProductStock = (request, h) => {
+  try {
+    const cart_items = request.payload.cart_items;
+    return Promise.all(cart_items.map(item => {
+      return new Promise(async (resolve, reject) => {
+        let validate = false;
+        const product = await ProductHelper.getFitmartProductById(item.id);
+        if (product.stock_quantity >= item.quantity) {
+          validate = true;
+        }
+        resolve({
+          ...item,
+          isOutOfStock: validate
+        });
+      })
+    })).then(res => {
+      const isProductNotValid = res.filter(item => {
+        return item.validate === false
+      })
+      if (isProductNotValid.length > 0) {
+        return Boom.notAcceptable('Some of product is out of stock');
+      }
+      return h.response(res);
+    })
   } catch (error) {
     return error;
   }
