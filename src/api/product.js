@@ -297,8 +297,15 @@ const getRelatedProducts = async (request, h) => {
 const getProductBySlug = async (request, h) => {
   try {
     const product_slug = request.params.product_slug;
-    const product = await ProductHelper.getProductBySlug(product_slug);
-    return h.response(product);
+    const productFitmart = await ProductHelper.getProductBySlug(product_slug);
+    const productDB = await ProductHelper.getProductsByID(productFitmart[0].id);
+    const response = [{
+      ...productFitmart[0],
+      fitco_product_detail: {
+        product_id: productDB.product_id
+      }
+    }]
+    return h.response(response);
   } catch (error) {
     return error;
   }
