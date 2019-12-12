@@ -1,6 +1,8 @@
+const _ = require('lodash');
 const Padawan = require('../services/padawan');
 const JwtHelper = require('../authentication/jwtHelper');
 const Config = require('../../config');
+const Fitmart = require('../services/fitmart');
 
 const getUserDetailById = ({ request, id }) => {
   return new Promise((resolve, reject) => {
@@ -30,7 +32,34 @@ const createUserToken = ({ request }) => {
   });
 };
 
+const getAllCustomers = () => {
+  return new Promise((resolve, reject) => {
+    Fitmart.getAllCustomers().then(response => {
+      resolve(response);
+    });
+  });
+};
+
+const getAllCustomersByEmail = email => {
+  return new Promise((resolve, reject) => {
+    Fitmart.getCustomerByEmail(email).then(response => {
+      resolve(response);
+    });
+  });
+};
+
+const createNewCustomer = data => {
+  return new Promise((resolve, reject) => {
+    Fitmart.createNewCustomer(data).then(response => {
+      resolve(response);
+    });
+  });
+};
+
 module.exports = {
   getUserDetailById,
-  createUserToken
+  createUserToken,
+  getAllCustomers,
+  getAllCustomersByEmail,
+  createNewCustomer
 };

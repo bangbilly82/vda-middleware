@@ -4,11 +4,14 @@ const Utils = require('../utils/Utils');
 const host = Config.get('/staticFile');
 const _ = require('lodash');
 const Fitmart = require('../services/fitmart');
+const WP = require('../services/wp');
+const UserHelper = require('../helpers/userHelper');
+const ProductModel = require('../models/productModel');
+const Boom = require('@hapi/boom');
+// const Redis = require('../services/redis');
 
-const CATEGORY_MAPPING = {
-  flashsale: 102,
-  featured: 227
-};
+// const PRODUCT_KEY_DB_REDIS = 'db_product_redis.';
+// const PRODUCT_KEY_FITSHOP_REDIS = 'fitshop_product_redis.';
 
 const getAllPointBoosterMerchant = ({ request }) => {
   return new Promise((resolve, reject) => {
@@ -52,14 +55,40 @@ const getProductById = id => {
   });
 };
 
-const getAllFitmartProducts = category => {
+const getAllFitmartProducts = ({ request }) => {
   return new Promise((resolve, reject) => {
-    const categoryId = CATEGORY_MAPPING[category];
-    Fitmart.getAllProduct(categoryId).then(response => {
+    Fitmart.getAllProduct(request).then(response => {
       resolve(response);
     });
   });
 };
+
+const getAllProductByCategory = (categoryId, request) => {
+  return new Promise((resolve, reject) => {
+    Fitmart.getAllProductByCategory(categoryId, request).then(response => {
+      resolve(response);
+    });
+  });
+};
+
+// const getFitmartProductById = id => {
+//   return new Promise((resolve, reject) => {
+//     Redis.getKey(PRODUCT_KEY_FITSHOP_REDIS + id, (err, value) => {
+//       if (value) {
+//         return resolve(JSON.parse(value))
+//       } else {
+//         Fitmart.getProductById(id).then(response => {
+//           const productDetailCache = JSON.stringify(response);
+//           Redis.setKey(PRODUCT_KEY_FITSHOP_REDIS + id, productDetailCache, (err, status) => {
+//             if (status) {
+//               resolve(response);
+//             }
+//           });
+//         });
+//       }
+//     })
+//   });
+// };
 
 const getFitmartProductById = id => {
   return new Promise((resolve, reject) => {
@@ -85,19 +114,126 @@ const getAllShippingMethods = () => {
   });
 };
 
-const proceedOrder = ({ request }) => {
+const proceedOrder = ({ request, user }) => {
   return new Promise((resolve, reject) => {
     const data = request.payload;
+    _.extend(data, {
+      customer_id: user.id
+    });
     Fitmart.proceedOrder(data).then(response => {
       resolve(response);
     });
   });
 };
 
+const checkIfUserExist = async ({ request }) => {
+  try {
+    const { payload } = request;
+    const email = payload.billing.email;
+    const user = await UserHelper.getAllCustomersByEmail(email);
+    if (!_.isEmpty(user)) {
+      return Promise.resolve({ request, user: user[0] });
+    } else {
+      const data = {
+        email: email,
+        first_name: payload.billing.first_name,
+        last_name: payload.billing.last_name,
+        username: email,
+        billing: { ...payload.billing },
+        shipping: { ...payload.shipping }
+      };
+      const newUser = await UserHelper.createNewCustomer(data);
+      return Promise.resolve({ request, user: newUser });
+    }
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
 const getAllAvailableCoupons = () => {
   return new Promise((resolve, reject) => {
     Fitmart.getAllAvailableCoupons().then(response => {
       resolve(response);
+    });
+  });
+};
+
+const searchByCriteria = query => {
+  return new Promise((resolve, reject) => {
+    WP.searchByCriteria(query).then(response => {
+      resolve(response);
+    });
+  });
+};
+
+const getAllFitmartProductsByQuery = query => {
+  return new Promise((resolve, reject) => {
+    Fitmart.getAllProductByQuery(query).then(response => {
+      resolve(response);
+    });
+  });
+};
+
+const getProductDB = () => {
+  return new Promise((resolve, reject) => {
+    ProductModel.getProducts()
+      .then(results => {
+        resolve(results);
+      })
+      .catch(err => {
+        reject(Boom.badImplementation(err));
+      });
+  });
+};
+
+// const getProductsByID = id => {
+//   return new Promise((resolve, reject) => {
+//     Redis.getKey(PRODUCT_KEY_DB_REDIS + id, (err, value) => {
+//       if (value) {
+//         const productDetail = JSON.parse(value);
+//         return resolve(productDetail[0]);
+//       } else {
+//         ProductModel.getProductsByID(id)
+//           .then(results => {
+//             const productDetailCache = JSON.stringify(results);
+//             Redis.setKey(PRODUCT_KEY_DB_REDIS + id, productDetailCache, (err, status) => {
+//               if (status) {
+//                 resolve(results[0]);
+//               }
+//             });
+//           })
+//           .catch(err => {
+//             reject(Boom.badImplementation(err));
+//           });
+//       }
+//     });
+//   });
+// };
+
+const getProductsByID = id => {
+  return new Promise((resolve, reject) => {
+    ProductModel.getProductsByID(id)
+      .then(results => {
+        resolve(results[0]);
+      })
+      .catch(err => {
+        reject(Boom.badImplementation(err));
+      });
+  });
+};
+
+const getProductBySlug = slug => {
+  return new Promise((resolve, reject) => {
+    Fitmart.getProductBySlug(slug).then(response => {
+      resolve(response);
+    });
+  });
+};
+
+const getBannerJSON = () => {
+  return new Promise((resolve, reject) => {
+    Utils.readBannerJson().then(results => {
+      resolve(results);
     });
   });
 };
@@ -111,5 +247,13 @@ module.exports = {
   getAllFitmartPayments,
   getAllShippingMethods,
   proceedOrder,
-  getAllAvailableCoupons
+  getAllAvailableCoupons,
+  searchByCriteria,
+  checkIfUserExist,
+  getAllFitmartProductsByQuery,
+  getAllProductByCategory,
+  getProductDB,
+  getProductsByID,
+  getProductBySlug,
+  getBannerJSON
 };

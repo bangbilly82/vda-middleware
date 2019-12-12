@@ -37,8 +37,10 @@
     "pino": "^5.13.4",
     "pino-pretty": "^3.2.2",
     "pm2": "^4.1.1",
+    "query-string": "^6.8.3",
     "request": "^2.88.0",
     "uuid": "^3.3.3",
-    "woocommerce-api": "^1.5.0"
+    "woocommerce-api": "^1.5.0",
+    "wpapi": "^1.2.1"
   }
 }
