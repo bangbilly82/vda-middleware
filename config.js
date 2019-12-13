@@ -114,7 +114,7 @@ var config = {
   fitmartHost: {
     $filter: 'env',
     production: 'https://fitmart.co.id/',
-    staging: 'https://fitmart.co.id/',
+    staging: 'https://dev.landing.fitshop.id/',
     dev: 'https://dev.landing.fitshop.id/',
     local: 'http://localhost:8000',
     $default: 'http://localhost:8000'
