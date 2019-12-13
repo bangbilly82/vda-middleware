@@ -1,5 +1,7 @@
 const Joi = require('joi');
+const Boom = require('@hapi/boom');
 const ProductHelper = require('../helpers/productHelper');
+const CategoriesHelper = require('../helpers/categoriesHelper');
 
 module.exports = {
   name: 'product-api',
@@ -8,13 +10,23 @@ module.exports = {
     server.route([
       {
         method: 'GET',
-        path: '/{category_name?}',
+        path: '/',
         options: {
           auth: 'guestAuth',
           description: 'Get all products from fitmart',
           tags: ['api', 'Product']
         },
         handler: getAllFitmartProducts
+      },
+      {
+        method: 'GET',
+        path: '/category/{category_name?}',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get all products by category from fitmart',
+          tags: ['api', 'Product']
+        },
+        handler: getAllFitmartProductsByCategory
       },
       {
         method: 'GET',
@@ -70,6 +82,86 @@ module.exports = {
           tags: ['api', 'Product']
         },
         handler: getAllAvailableCoupons
+      },
+      {
+        method: 'GET',
+        path: '/search',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get all matching product by search query',
+          tags: ['api', 'Product']
+        },
+        handler: searchByCriteria
+      },
+      {
+        method: 'GET',
+        path: '/retail',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get all products form DB',
+          tags: ['api', 'Product']
+        },
+        handler: getAllProductsFromDB
+      },
+      {
+        method: 'GET',
+        path: '/retail/id/{product_id}',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get products by ID form DB',
+          tags: ['api', 'Product']
+        },
+        handler: getProductsByID
+      },
+      {
+        method: 'GET',
+        path: '/retail/related-products',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get related products based on product ID',
+          tags: ['api', 'Product'],
+          validate: {
+            query: {
+              related_ids: Joi.string().optional()
+            }
+          }
+        },
+        handler: getRelatedProducts
+      },
+      {
+        method: 'GET',
+        path: '/retail/slug/{product_slug}',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get products by slug form fitmart',
+          tags: ['api', 'Product']
+        },
+        handler: getProductBySlug
+      },
+      {
+        method: 'GET',
+        path: '/banner',
+        options: {
+          auth: 'guestAuth',
+          description: 'Get products banner image for carousel',
+          tags: ['api', 'Product']
+        },
+        handler: getProductBanner
+      },
+      {
+        method: 'POST',
+        path: '/validate/stock',
+        options: {
+          auth: 'guestAuth',
+          description: 'Validate product stock by ID',
+          tags: ['api', 'Product'],
+          validate: {
+            payload: {
+              cart_items: Joi.array().required()
+            }
+          }
+        },
+        handler: validateProductStock
       }
     ]);
   }
@@ -77,8 +169,25 @@ module.exports = {
 
 const getAllFitmartProducts = async (request, h) => {
   try {
+    const products = await ProductHelper.getAllFitmartProducts({ request });
+    return h.response(products);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getAllFitmartProductsByCategory = async (request, h) => {
+  try {
     const category = request.params.category_name;
-    const products = await ProductHelper.getAllFitmartProducts(category);
+    let categories = [];
+    if (category) {
+      categories = await CategoriesHelper.getAllCategories();
+      // find categories ID
+      categories = categories.filter(item => {
+        return item.slug.toLowerCase() === category.toLowerCase();
+      })
+    }
+    const products = await ProductHelper.getAllProductByCategory(category && categories[0].id, request);
     return h.response(products);
   } catch (error) {
     return error;
@@ -115,10 +224,11 @@ const getAllShippingMethods = async (request, h) => {
 
 const proceedOrder = async (request, h) => {
   try {
-    const orders = await ProductHelper.proceedOrder({ request });
+    const validateUser = await ProductHelper.checkIfUserExist({ request });
+    const orders = await ProductHelper.proceedOrder({ request, user: validateUser.user });
     return h.response(orders);
   } catch (error) {
-    return error;
+    return h.response(error);
   }
 };
 
@@ -126,6 +236,114 @@ const getAllAvailableCoupons = async (request, h) => {
   try {
     const couponse = await ProductHelper.getAllAvailableCoupons();
     return h.response(couponse);
+  } catch (error) {
+    return error;
+  }
+};
+
+const searchByCriteria = async (request, h) => {
+  try {
+    const query = request.query.query;
+    if (query.length === 0) {
+      return h.response([]);
+    }
+    const products = await ProductHelper.getAllFitmartProductsByQuery(query);
+    return h.response(products);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getAllProductsFromDB = async (request, h) => {
+  try {
+    const products = await ProductHelper.getProductDB();
+    return h.response(products);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getProductsByID = async (request, h) => {
+  try {
+    const id = request.params.product_id;
+    return Promise.all([ProductHelper.getProductsByID(id), ProductHelper.getFitmartProductById(id)]).then(products => {
+      const response = {
+        ...products[1],
+        fitco_product_detail: {
+          product_id: products[0].product_id
+        }
+      }
+      return h.response(response);
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
+const getRelatedProducts = async (request, h) => {
+  try {
+    const related_ids = request.query.related_ids;
+    const product_id_array = related_ids.split(',');
+    return Promise.all(product_id_array.map(id => {
+      return ProductHelper.getFitmartProductById(id);
+    })).then(response => {
+      return h.response(response);
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
+const getProductBySlug = async (request, h) => {
+  try {
+    const product_slug = request.params.product_slug;
+    const productFitmart = await ProductHelper.getProductBySlug(product_slug);
+    const productDB = await ProductHelper.getProductsByID(productFitmart[0].id);
+    const response = [{
+      ...productFitmart[0],
+      fitco_product_detail: {
+        product_id: productDB.product_id
+      }
+    }]
+    return h.response(response);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getProductBanner = async (request, h) => {
+  try {
+    const banner = await ProductHelper.getBannerJSON();
+    return h.response(banner);
+  } catch (error) {
+    return error;
+  }
+};
+
+const validateProductStock = (request, h) => {
+  try {
+    const cart_items = request.payload.cart_items;
+    return Promise.all(cart_items.map(item => {
+      return new Promise(async (resolve, reject) => {
+        let validate = false;
+        const product = await ProductHelper.getFitmartProductById(item.id);
+        if (product.stock_quantity >= item.quantity) {
+          validate = true;
+        }
+        resolve({
+          ...item,
+          isOutOfStock: validate
+        });
+      })
+    })).then(res => {
+      const isProductNotValid = res.filter(item => {
+        return item.isOutOfStock === false
+      })
+      if (isProductNotValid.length > 0) {
+        return Boom.notAcceptable('Some of product is out of stock');
+      }
+      return h.response(res);
+    })
   } catch (error) {
     return error;
   }

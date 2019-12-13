@@ -1,4 +1,5 @@
 const WooCommerceAPI = require('woocommerce-api');
+const QueryString = require('query-string');
 const Config = require('../../config');
 
 const FitmartAPI = new WooCommerceAPI({
@@ -14,9 +15,22 @@ const parseResponse = (result, callback) => {
   callback(response);
 };
 
-const getAllProduct = category => {
+const getAllProduct = request => {
   return new Promise((resolve, reject) => {
-    const url = category ? `products?category=${category}` : 'products';
+    const query = QueryString.stringify(request.query);
+    const url = 'products' + (query ? `?${query}` : '');
+    FitmartAPI.getAsync(url).then(result => {
+      parseResponse(result, data => {
+        resolve(data);
+      });
+    });
+  });
+};
+
+const getAllProductByCategory = (categoryId, request) => {
+  const query = QueryString.stringify(request.query);
+  return new Promise((resolve, reject) => {
+    const url = 'products' + (query ? `?category=${categoryId}&${query}` : `?category=${categoryId}`);
     FitmartAPI.getAsync(url).then(result => {
       parseResponse(result, data => {
         resolve(data);
@@ -83,6 +97,56 @@ const getAllAvailableCoupons = () => {
   });
 };
 
+const getAllCustomers = () => {
+  return new Promise((resolve, reject) => {
+    FitmartAPI.getAsync('customers?per_page=10').then(result => {
+      parseResponse(result, data => {
+        resolve(data);
+      });
+    });
+  });
+};
+
+const getCustomerByEmail = email => {
+  return new Promise((resolve, reject) => {
+    FitmartAPI.getAsync(`customers?email=${email}`).then(result => {
+      parseResponse(result, data => {
+        resolve(data);
+      });
+    });
+  });
+};
+
+const createNewCustomer = data => {
+  return new Promise((resolve, reject) => {
+    FitmartAPI.post('customers', data, (err, result, res) => {
+      resolve(JSON.parse(res));
+    });
+  });
+};
+
+const getAllProductByQuery = query => {
+  return new Promise((resolve, reject) => {
+    const url = 'products?per_page=100&search=' + query;
+    FitmartAPI.getAsync(url).then(result => {
+      parseResponse(result, data => {
+        resolve(data);
+      });
+    });
+  });
+};
+
+const getProductBySlug = slug => {
+  return new Promise((resolve, reject) => {
+    const url = `products?slug=${slug}`;
+    FitmartAPI.getAsync(url).then(result => {
+      parseResponse(result, data => {
+        resolve(data);
+      });
+    });
+  });
+};
+
 module.exports = {
   getAllProduct,
   getProductById,
@@ -90,5 +154,11 @@ module.exports = {
   getAllPayments,
   getAllShippingMethods,
   proceedOrder,
-  getAllAvailableCoupons
+  getAllAvailableCoupons,
+  getAllCustomers,
+  getCustomerByEmail,
+  createNewCustomer,
+  getAllProductByQuery,
+  getAllProductByCategory,
+  getProductBySlug
 };

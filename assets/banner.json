@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Booster intro",
+    "url_key": "marketing-banner2",
+    "deep_link": "{\"deeplink\":{\"screen\":\"ALL_BOOSTERS\"}}",
+    "banner_order": 2,
+    "banner": "https://dev.cdn.fit2go.id/app/public/images/marketing/banner/1570725265_5d9f5d918e6b9.png"
+  },
+  {
+    "name": "Redeem Now",
+    "url_key": "marketing-banner3",
+    "deep_link": "{\"deeplink\":{\"screen\":\"ALL_CLASSES\"}}",
+    "banner_order": 3,
+    "banner": "https://dev.cdn.fit2go.id/app/public/images/marketing/banner/1562754340_5d25bd249119e.jpg"
+  },
+  {
+    "name": "referral code",
+    "url_key": "marketing-banner4",
+    "deep_link": "{\"deeplink\":{\"screen\":\"REFERRAL\"}}",
+    "banner_order": 4,
+    "banner": "https://dev.cdn.fit2go.id/app/public/images/marketing/banner/1562754355_5d25bd33ecf5f.jpg"
+  }
+]
