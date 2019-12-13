@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/pm2/bin/pm2-runtime ecosystem.config.js",
+    "start": "./node_modules/pm2/bin/pm2-runtime ecosystem.config.js --env dev",
+    "staging": "./node_modules/pm2/bin/pm2-runtime ecosystem.config.js --env staging",
+    "production": "./node_modules/pm2/bin/pm2-runtime ecosystem.config.js --env production",
     "poststart": "node ./node_modules/pm2/bin/pm2 logs",
     "dev": "nodemon server.js",
     "deploy": "pm2 start ecosystem.config.js --env dev"
