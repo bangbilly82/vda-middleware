@@ -39,10 +39,10 @@ var config = {
   mysqlConnection: {
     $filter: 'env',
     production: {
-      host: 'fitco-staging.cz8ywgnyqpoq.ap-southeast-1.rds.amazonaws.com',
+      host: 'fit2go.cz8ywgnyqpoq.ap-southeast-1.rds.amazonaws.com',
       user: 'fit2go',
       password: '6UYNd&8xPy9pT4wq',
-      database: 'fitco_shop',
+      database: 'fitco_production',
       port: 3306
     },
     staging: {
@@ -113,7 +113,7 @@ var config = {
   },
   fitmartHost: {
     $filter: 'env',
-    production: 'https://fitmart.co.id/',
+    production: 'https://fitshop.id/',
     staging: 'https://dev.landing.fitshop.id/',
     dev: 'https://dev.landing.fitshop.id/',
     local: 'http://localhost:8000',
@@ -126,8 +126,8 @@ var config = {
       consumerSecret: 'cs_038c5c2796a0e1428c3eeb6c582f9d551c3fa9cb'
     },
     staging: {
-      consumerKey: 'ck_4b74e619f040bae0e7839069d7b7a9822066baad',
-      consumerSecret: 'cs_038c5c2796a0e1428c3eeb6c582f9d551c3fa9cb'
+      consumerKey: 'ck_776804829652b11dbb44c9af31a8d07e33b739e4',
+      consumerSecret: 'cs_c3b79647cc8238e3a0425895fc52c96f74ba9ed3'
     },
     dev: {
       consumerKey: 'ck_776804829652b11dbb44c9af31a8d07e33b739e4',
