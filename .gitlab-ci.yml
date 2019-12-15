@@ -42,7 +42,7 @@ deploy-master:
   type: deploy
   environment: master
   script:
-  - eb deploy r2-d2-shop-api
+  - eb deploy shop-api
   when: manual
   only:
   - master

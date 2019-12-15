@@ -2,7 +2,7 @@ branch-defaults:
   development:
     environment: shop-api-dev
   master:
-    environment: r2-d2-shop-api
+    environment: shop-api
   staging:
     environment: shop-api-staging
 global:
