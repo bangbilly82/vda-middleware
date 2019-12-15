@@ -31,7 +31,7 @@ deploy-staging:
   type: deploy
   environment: staging
   script:
-  - eb deploy r2-d2-shop-api-staging
+  - eb deploy shop-api-staging
   only:
   - staging
 
