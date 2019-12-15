@@ -67,5 +67,11 @@ module.exports = [
     routes: {
       prefix: '/api/shop/media'
     }
+  },
+  {
+    plugin: require('./src/api/promo'),
+    routes: {
+      prefix: '/api/shop/promo'
+    }
   }
 ];
