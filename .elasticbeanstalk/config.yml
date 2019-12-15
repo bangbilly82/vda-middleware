@@ -1,6 +1,6 @@
 branch-defaults:
   development:
-    environment: r2-d2-shop-api-dev
+    environment: shop-api-dev
   master:
     environment: r2-d2-shop-api
   staging:

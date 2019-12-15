@@ -20,7 +20,7 @@ deploy-development:
   type: deploy
   environment: development
   script:
-  - eb deploy r2-d2-shop-api-dev
+  - eb deploy shop-api-dev
   only:
   - development
 
