@@ -4,6 +4,7 @@ const PRODUCTS = Path.join(__dirname, '../../assets/products.json');
 const CATEGORIES = Path.join(__dirname, '../../assets/categories.json');
 const SHIPPING = Path.join(__dirname, '../../assets/shipping.json');
 const BANNER = Path.join(__dirname, '../../assets/banner.json');
+const PROMOTION = Path.join(__dirname, '../../assets/promotion.json');
 
 const readFile = file => {
   return new Promise(function(resolve, reject) {
@@ -50,9 +51,18 @@ const readBannerJson = () => {
   });
 };
 
+const readPromotionJson = () => {
+  return new Promise((resolve, reject) => {
+    return readFile(PROMOTION).then(response => {
+      resolve(response);
+    });
+  });
+};
+
 module.exports = {
   readProductJson,
   readCategoriesJson,
   readShippingJson,
-  readBannerJson
+  readBannerJson,
+  readPromotionJson
 };

@@ -1,0 +1,12 @@
+[
+  {
+    "promo_id": 1,
+    "category": "flash-sale",
+    "title": "Flash Sale Product"
+  },
+  {
+    "promo_id": 2,
+    "category": "produk-unggulan",
+    "title": "Featured Product"
+  }
+]
