@@ -1,10 +1,10 @@
 branch-defaults:
   development:
-    environment: r2-d2-shop-api-dev
+    environment: shop-api-dev
   master:
     environment: r2-d2-shop-api
   staging:
-    environment: r2-d2-shop-api-staging
+    environment: shop-api-staging
 global:
   application_name: r2-d2-shop-api
   branch: null
