@@ -55,5 +55,17 @@ module.exports = [
     routes: {
       prefix: '/api/activity'
     }
+  },
+  {
+    plugin: require('./src/api/keyword'),
+    routes: {
+      prefix: '/api/keyword'
+    }
+  },
+  {
+    plugin: require('./src/api/value'),
+    routes: {
+      prefix: '/api/value'
+    }
   }
 ];
