@@ -164,6 +164,25 @@ var config = {
       host: 'https://pro.rajaongkir.com/api',
       apiKey: 'bef633a7aec9fe973400bcdfea287d35'
     }
+  },
+  mongodb: {
+    $filter: 'env',
+    production: {
+      host: 'mongodb://vda:vdaasmin1@ds135335.mlab.com:35335/vda'
+    },
+    staging: {
+      host: 'mongodb://vda:vdaasmin1@ds135335.mlab.com:35335/vda'
+    },
+    dev: {
+      // host: 'mongodb://127.0.0.1:27017/'
+      host: 'mongodb://vda:vdaasmin1@ds135335.mlab.com:35335/vda'
+    },
+    local: {
+      host: 'mongodb://127.0.0.1:27017/'
+    },
+    $default: {
+      host: 'mongodb://127.0.0.1:27017/'
+    }
   }
 };
 

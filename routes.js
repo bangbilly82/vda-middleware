@@ -27,51 +27,33 @@ module.exports = [
     plugin: initServerRoute
   },
   {
-    plugin: require('./src/api/categories'),
-    routes: {
-      prefix: '/api/shop/categories'
-    }
-  },
-  {
-    plugin: require('./src/api/product'),
-    routes: {
-      prefix: '/api/shop/product'
-    }
-  },
-  {
     plugin: require('./src/api/user'),
     routes: {
       prefix: '/api/user'
     }
   },
   {
-    plugin: require('./src/api/staticfile'),
+    plugin: require('./src/api/division'),
     routes: {
-      prefix: '/api/static/file'
+      prefix: '/api/division'
     }
   },
   {
-    plugin: require('./src/api/shipping'),
+    plugin: require('./src/api/rating'),
     routes: {
-      prefix: '/api/shipping'
+      prefix: '/api/rating'
     }
   },
   {
-    plugin: require('./src/api/eat'),
+    plugin: require('./src/api/program'),
     routes: {
-      prefix: '/api/eat'
+      prefix: '/api/program'
     }
   },
   {
-    plugin: require('./src/api/media'),
+    plugin: require('./src/api/activity'),
     routes: {
-      prefix: '/api/shop/media'
-    }
-  },
-  {
-    plugin: require('./src/api/promo'),
-    routes: {
-      prefix: '/api/shop/promo'
+      prefix: '/api/activity'
     }
   }
 ];

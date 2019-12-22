@@ -1,5 +1,4 @@
-const Joi = require('joi');
-const UserHelper = require('../helpers/userHelper');
+const UserController = require('../controller/user.controller');
 
 module.exports = {
   name: 'user-api',
@@ -7,73 +6,138 @@ module.exports = {
   register: server => {
     server.route([
       {
-        method: 'GET',
-        path: '/id/{user_id}',
+        method: 'POST',
+        path: '/register',
         options: {
-          auth: 'jwt',
-          description: 'Get user by id',
-          tags: ['api', 'User'],
-          validate: {
-            params: {
-              user_id: Joi.string().required()
-            }
-          }
+          auth: false,
+          description: 'Register new user',
+          tags: ['api', 'User']
         },
-        handler: getUserById
+        handler: registerUser
+      },
+      {
+        method: 'GET',
+        path: '/all',
+        options: {
+          auth: false,
+          description: 'Get all user',
+          tags: ['api', 'User']
+        },
+        handler: getAllUser
       },
       {
         method: 'POST',
-        path: '/create/token',
+        path: '/login',
         options: {
           auth: false,
-          description: 'Create user token',
-          tags: ['api', 'User'],
-          validate: {
-            payload: {
-              email: Joi.string().email().required(),
-              password: Joi.string().required()
-            }
-          }
-        },
-        handler: createUserToken
-      },
-      {
-        method: 'GET',
-        path: '/customers',
-        options: {
-          auth: false,
-          description: 'Create new customer',
+          description: 'Login user',
           tags: ['api', 'User']
         },
-        handler: getAllCustomers
+        handler: loginUser
+      },
+      {
+        method: 'PUT',
+        path: '/changedata',
+        options: {
+          auth: false,
+          description: 'Forgot user password',
+          tags: ['api', 'User']
+        },
+        handler: forgotPassword
+      },
+      {
+        method: 'PUT',
+        path: '/changepassword',
+        options: {
+          auth: false,
+          description: 'Change user password',
+          tags: ['api', 'User']
+        },
+        handler: changePassword
+      },
+      {
+        method: 'POST',
+        path: '/get/datauser',
+        options: {
+          auth: false,
+          description: 'Get user by NIK',
+          tags: ['api', 'User']
+        },
+        handler: getUserByNik
+      },
+      {
+        method: 'DELETE',
+        path: '/delete',
+        options: {
+          auth: false,
+          description: 'Delete user by NIK',
+          tags: ['api', 'User']
+        },
+        handler: deleteUser
       }
     ]);
   }
 };
 
-const getUserById = async (request, h) => {
+const registerUser = async (request, h) => {
   try {
-    const user_id = request.params.user_id;
-    const user = await UserHelper.getUserDetailById({ request, id: user_id });
+    const payload = request.payload;
+    const register = await UserController.registerUser(payload);
+    return h.response(register);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getAllUser = async (request, h) => {
+  try {
+    const users = await UserController.getAllUser();
+    return h.response(users);
+  } catch (error) {
+    return error;
+  }
+};
+
+const loginUser = async (request, h) => {
+  try {
+    const users = await UserController.loginUser(request.payload);
+    return h.response(users);
+  } catch (error) {
+    return error;
+  }
+};
+
+const forgotPassword = async (request, h) => {
+  try {
+    const users = await UserController.forgotPassword(request.payload);
+    return h.response(users);
+  } catch (error) {
+    return error;
+  }
+};
+
+const changePassword = async (request, h) => {
+  try {
+    const users = await UserController.changePassword(request.payload);
+    return h.response(users);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getUserByNik = async (request, h) => {
+  try {
+    const user = await UserController.getUserByNik(request.payload.nik);
     return h.response(user);
   } catch (error) {
     return error;
   }
 };
 
-const createUserToken = async (request, h) => {
+const deleteUser = async (request, h) => {
   try {
-    const token = await UserHelper.createUserToken({ request });
-    return h.response(token);
-  } catch (error) {
-    return error;
-  }
-};
-
-const getAllCustomers = async (request, h) => {
-  try {
-    const customers = await UserHelper.getAllCustomers();
-    return h.response(customers);
+    const user = await UserController.deleteUser(request.payload.nik);
+    return h.response(user);
   } catch (error) {
     return error;
   }
