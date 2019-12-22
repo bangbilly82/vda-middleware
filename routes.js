@@ -67,5 +67,11 @@ module.exports = [
     routes: {
       prefix: '/api/value'
     }
+  },
+  {
+    plugin: require('./src/api/graphic'),
+    routes: {
+      prefix: '/api/graphic'
+    }
   }
 ];
