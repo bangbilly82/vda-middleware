@@ -17,7 +17,7 @@ module.exports = {
       },
       {
         method: 'GET',
-        path: '/all',
+        path: '/get/all',
         options: {
           auth: false,
           description: 'Get all user',
