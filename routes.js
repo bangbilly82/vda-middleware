@@ -73,5 +73,17 @@ module.exports = [
     routes: {
       prefix: '/api/graphic'
     }
+  },
+  {
+    plugin: require('./src/api/comment'),
+    routes: {
+      prefix: '/api/comment'
+    }
+  },
+  {
+    plugin: require('./src/api/chart'),
+    routes: {
+      prefix: '/api/comment'
+    }
   }
 ];
