@@ -42,7 +42,7 @@ const Auth = {
 
 const GuestAuth = {
   plugin: require('./src/authentication/guest')
-}
+};
 
 const manifest = {
   server: {
@@ -50,11 +50,22 @@ const manifest = {
     routes: {
       files: {
         relativeTo: Path.join(__dirname, 'public')
-      }
+      },
+      cors: true
     }
   },
   register: {
-    plugins: [Inert, Vision, Swagger, Logger, HapiAuthJWT, Auth, GuestAuth, PostAuthHandler, ...Routes]
+    plugins: [
+      Inert,
+      Vision,
+      Swagger,
+      Logger,
+      HapiAuthJWT,
+      Auth,
+      GuestAuth,
+      PostAuthHandler,
+      ...Routes
+    ]
   }
 };
 
@@ -63,8 +74,5 @@ const options = {
 };
 
 module.exports = () => {
-  return Glue.compose(
-    manifest,
-    options
-  );
+  return Glue.compose(manifest, options);
 };
