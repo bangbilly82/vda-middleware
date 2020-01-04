@@ -64,6 +64,16 @@ module.exports = {
           tags: ['api', 'Comment']
         },
         handler: postCommentAssessment
+      },
+      {
+        method: 'POST',
+        path: '/get/user/fordetails',
+        options: {
+          auth: false,
+          description: 'Get comment for user detail',
+          tags: ['api', 'Comment']
+        },
+        handler: getUserDetailComment
       }
     ]);
   }
@@ -121,6 +131,17 @@ const deleteComment = async (request, h) => {
 const postCommentAssessment = async (request, h) => {
   try {
     const comment = await CommentController.postCommentAssessment(
+      request.payload
+    );
+    return h.response(comment);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getUserDetailComment = async (request, h) => {
+  try {
+    const comment = await CommentController.getUserDetailComment(
       request.payload
     );
     return h.response(comment);
