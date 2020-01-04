@@ -54,6 +54,16 @@ module.exports = {
           tags: ['api', 'Comment']
         },
         handler: deleteComment
+      },
+      {
+        method: 'POST',
+        path: '/post/admin/createcomment',
+        options: {
+          auth: false,
+          description: 'Create comment assessment from admin',
+          tags: ['api', 'Comment']
+        },
+        handler: postCommentAssessment
       }
     ]);
   }
@@ -102,6 +112,17 @@ const updateComment = async (request, h) => {
 const deleteComment = async (request, h) => {
   try {
     const comment = await CommentController.deleteComment(request.payload);
+    return h.response(comment);
+  } catch (error) {
+    return error;
+  }
+};
+
+const postCommentAssessment = async (request, h) => {
+  try {
+    const comment = await CommentController.postCommentAssessment(
+      request.payload
+    );
     return h.response(comment);
   } catch (error) {
     return error;

@@ -1,4 +1,7 @@
 const CommentModel = require('../models/comment/comment.model');
+const AssessmentModel = require('../models/comment/assessment.model');
+const UserModel = require('../models/user/user.model');
+const Helper = require('../utils/Helper');
 
 const getUserGiftComment = userGiftComment => {
   return new Promise((resolve, reject) => {
@@ -82,10 +85,49 @@ const deleteComment = payload => {
   });
 };
 
+const postCommentAssessment = payload => {
+  return new Promise((resolve, reject) => {
+    const valueChoice =
+      typeof payload.valueChoice === 'string'
+        ? JSON.parse(payload.valueChoice)
+        : payload.valueChoice;
+    const scoreAqumulate = Helper.triggerAcumulateRateCommentFirstFromAdmin(
+      valueChoice
+    );
+
+    AssessmentModel.create({
+      userGetComment: payload.userGetComment,
+      totalRating: scoreAqumulate.countRate,
+      totalValueRating: scoreAqumulate.countAll,
+      typeProgram: payload.typeProgram,
+      activity: payload.activity,
+      valueChoice: valueChoice,
+      dateComment: new Date(),
+      status: true
+    })
+      .then(data => {
+        UserModel.findByIdAndUpdate(payload.userId, {
+          rate: scoreAqumulate.countRate,
+          score: scoreAqumulate.countAll
+        })
+          .then(dataUser => {
+            resolve(data);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
 module.exports = {
   getUserGiftComment,
   getAllUserComment,
   getAllUserGetComment,
   updateComment,
-  deleteComment
+  deleteComment,
+  postCommentAssessment
 };
