@@ -146,11 +146,6 @@ const getUserComment = payload => {
                     Title: 'Partners',
                     valueOne: partners.assessed,
                     valueTwo: partners.assess
-                  },
-                  {
-                    Title: 'Employers',
-                    valueOne: employers.assessed,
-                    valueTwo: employers.assess
                   }
                 ]
               },
