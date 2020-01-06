@@ -45,7 +45,7 @@ const getAllUserGetComment = payload => {
   return new Promise((resolve, reject) => [
     CommentModel.find({
       userGetComment:
-        payload.userGetComment || payload.userGetComment.userGetComment
+        payload.userGetComment.userGetComment || payload.userGetComment
     })
       .populate('userGetComment')
       .populate('userGiftComment')
