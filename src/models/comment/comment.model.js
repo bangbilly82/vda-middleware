@@ -58,7 +58,8 @@ const commentSchema = new mongoose.Schema({
       ]
     }
   ],
-  status: Boolean
+  status: Boolean,
+  othersMessage: 'string'
 });
 
 const Comment = mongoose.model('Comments', commentSchema);

@@ -184,6 +184,7 @@ const postNewComment = payload => {
     const typeProgram = payload.typeProgram;
     const activity = payload.activity;
     const firstCommentEditPlan = {};
+    const othersMessage = payload.othersMessage || '';
 
     // MEMO: Cari Penilaian Pertama
     AssessmentModel.find({
@@ -330,7 +331,8 @@ const postNewComment = payload => {
                 typeAssessKeyword: typeAssessKeyword,
                 typeProgram: typeProgram,
                 valueProgramActivity: firstCommentEditPlan.valueChoice,
-                activity: activity
+                activity: activity,
+                othersMessage
               })
                 .then(dataCreateCommentSuccess => {
                   // MEMO: Cari Profil User
@@ -551,7 +553,8 @@ const postNewComment = payload => {
                             typeAssessKeyword: typeAssessKeyword,
                             typeProgram: typeProgram,
                             valueProgramActivity: valueProgramActivity,
-                            activity: activity
+                            activity: activity,
+                            othersMessage
                           })
 
                             .then(dataCreateCommentSuccess => {
