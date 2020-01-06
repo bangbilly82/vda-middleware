@@ -1,6 +1,7 @@
 const CommentModel = require('../models/comment/comment.model');
 const AssessmentModel = require('../models/comment/assessment.model');
 const UserModel = require('../models/user/user.model');
+const ProgramModel = require('../models/program/program.model');
 const Helper = require('../utils/Helper');
 
 const getUserGiftComment = userGiftComment => {
@@ -170,6 +171,446 @@ const getUserDetailComment = payload => {
       });
   });
 };
+const postNewComment = payload => {
+  return new Promise((resolve, reject) => {
+    const userGetComment = payload.userGetComment;
+    const userGiftComment = payload.userGiftComment;
+    const rating = payload.rating;
+    const valueRating = payload.valueRating;
+    const comment = payload.comment;
+    const typeAssess = payload.typeAssess;
+    const typeAssessValue = payload.typeAssessValue;
+    const typeAssessKeyword = payload.typeAssessKeyword;
+    const typeProgram = payload.typeProgram;
+    const activity = payload.activity;
+    const firstCommentEditPlan = {};
+
+    // MEMO: Cari Penilaian Pertama
+    AssessmentModel.find({
+      userGetComment: userGetComment
+    })
+      .populate({ path: 'valueChoice.choiceKeyword.nameKeyword' })
+      .populate({ path: 'valueChoice.nameValue' })
+      .then(dataCommenFirst => {
+        // MEMO: State Ulang
+        firstCommentEditPlan._id = dataCommenFirst[0]._id;
+        firstCommentEditPlan.userGetComment = dataCommenFirst[0].userGetComment;
+        firstCommentEditPlan.totalRating = 0;
+        firstCommentEditPlan.totalValueRating = 0;
+        firstCommentEditPlan.typeProgram = dataCommenFirst[0].typeProgram;
+        firstCommentEditPlan.activity = dataCommenFirst[0].activity;
+        firstCommentEditPlan.valueChoice = [];
+        firstCommentEditPlan.dateComment = new Date();
+        firstCommentEditPlan.status = true;
+        // MEMO: Kondisi Be-A Plus atau bukan
+        if (!typeProgram) {
+          let valueProgramActivity = [];
+          let acumulateRate = {};
+
+          // MEMO: Looping Penilaian Awal (Cari Value-nya)
+          for (
+            let idx = 0;
+            idx < dataCommenFirst[0].valueChoice.length;
+            idx++
+          ) {
+            // MEMO: Buat Object Value Baru
+            let object = {
+              nameValue: dataCommenFirst[0].valueChoice[idx].nameValue._id,
+              choiceKeyword: []
+            };
+            // MEMO: Conditional -> Jika data Value sama dengan Data Value Yg dinilai
+            if (
+              dataCommenFirst[0].valueChoice[idx].nameValue._id ==
+              typeAssessValue
+            ) {
+              // MEMO: Looping Penilaian Awal (Cari Keyword-nya)
+              for (
+                let index = 0;
+                index <
+                dataCommenFirst[0].valueChoice[idx].choiceKeyword.length;
+                index++
+              ) {
+                // MEMO: Buat Object Keyword Baru
+                let objectForValueKeyword = {
+                  nameKeyword:
+                    dataCommenFirst[0].valueChoice[idx].choiceKeyword[index]
+                      .nameKeyword._id,
+                  valueKeyword: 0
+                };
+                // MEMO: Cari Score Impact
+                var tryToGetScoreImpact = Helper.triggerScoreImpactForBeAplus(
+                  dataCommenFirst[0].valueChoice[idx].choiceKeyword[index]
+                    .valueKeyword,
+                  rating
+                );
+                // MEMO: Cari apakah Keyword sama dengan keyword yg dipilih
+                let checkDataKeywordIndex = typeAssessKeyword.findIndex(
+                  data => {
+                    return (
+                      data ==
+                      dataCommenFirst[0].valueChoice[idx].choiceKeyword[index]
+                        .nameKeyword._id
+                    );
+                  }
+                );
+                // MEMO: Conditional -> Jika data ada pada daftar yg dipilih
+                if (checkDataKeywordIndex == -1) {
+                  objectForValueKeyword.valueKeyword =
+                    dataCommenFirst[0].valueChoice[idx].choiceKeyword[
+                      index
+                    ].valueKeyword;
+                  object.choiceKeyword.push(objectForValueKeyword);
+                } else {
+                  // MEMO: Simpan Value Keyword
+                  objectForValueKeyword.valueKeyword =
+                    dataCommenFirst[0].valueChoice[idx].choiceKeyword[index]
+                      .valueKeyword + tryToGetScoreImpact;
+                  // console.log('============>', tryToGetScoreImpact)
+                  // MEMO: Push Objek Keyword Baru
+                  object.choiceKeyword.push(objectForValueKeyword);
+                }
+              }
+            } else {
+              // MEMO: Looping Penilaian Awal (Cari Keyword-nya)
+              for (
+                let index = 0;
+                index <
+                dataCommenFirst[0].valueChoice[idx].choiceKeyword.length;
+                index++
+              ) {
+                // MEMO: Buat Object Value Baru
+                let objectForValueKeyword = {
+                  nameKeyword:
+                    dataCommenFirst[0].valueChoice[idx].choiceKeyword[index]
+                      .nameKeyword._id,
+                  valueKeyword: 0
+                };
+                // MEMO: Simpan Value Keyword
+                objectForValueKeyword.valueKeyword =
+                  dataCommenFirst[0].valueChoice[idx].choiceKeyword[
+                    index
+                  ].valueKeyword;
+                // MEMO: Push Objek Keyword Baru
+                object.choiceKeyword.push(objectForValueKeyword);
+              }
+            }
+            // MEMO: Push Array Of Object Semua Value dan Keyword Baru
+            valueProgramActivity.push(object);
+          }
+          // MEMO: Menambahkan Array Of Object ke Key Penilaian Awal Baru
+          firstCommentEditPlan.valueChoice = valueProgramActivity;
+          // MEMO: Variabel Akumulasi Rate dan Value Baru
+          acumulateRate = Helper.triggerAcumulateRateCommentFirstFromAdmin(
+            valueProgramActivity
+          );
+          // MEMO: Update Komen Pertama
+          AssessmentModel.findByIdAndUpdate(firstCommentEditPlan._id, {
+            userGetComment: firstCommentEditPlan.userGetComment,
+            totalRating: acumulateRate.countRate,
+            totalValueRating: acumulateRate.countAll,
+            typeProgram: firstCommentEditPlan.typeProgram,
+            activity: firstCommentEditPlan.activity,
+            valueChoice: firstCommentEditPlan.valueChoice,
+            dateComment: firstCommentEditPlan.dateComment,
+            status: firstCommentEditPlan.status
+          })
+            .then(data => {
+              // MEMO: Create Komen User
+              CommentModel.create({
+                userGetComment: userGetComment,
+                userGiftComment: userGiftComment,
+                rating: acumulateRate.countRate,
+                originalRate: rating,
+                valueRating: acumulateRate.countAll,
+                comment: comment,
+                dateComment: new Date(),
+                status: false,
+                typeAssess: typeAssess,
+                typeAssessValue: typeAssessValue,
+                typeAssessKeyword: typeAssessKeyword,
+                typeProgram: typeProgram,
+                valueProgramActivity: firstCommentEditPlan.valueChoice,
+                activity: activity
+              })
+                .then(dataCreateCommentSuccess => {
+                  // MEMO: Cari Profil User
+                  UserModel.findById(dataCreateCommentSuccess.userGetComment)
+                    .then(dataUserGet => {
+                      // MEMO: Variabel Rate Baru
+                      let newRate = acumulateRate.countRate;
+                      // MEMO: Variabel Score Baru
+                      let newScore = acumulateRate.countAll;
+                      // MEMO: Update Rate dan Score User yg Dinilai
+                      UserModel.findByIdAndUpdate(
+                        dataCreateCommentSuccess.userGetComment,
+                        {
+                          rate: newRate,
+                          score: newScore
+                        }
+                      )
+                        .then(dataUserPost => {
+                          resolve(dataUserPost);
+                        })
+                        .catch(err => {
+                          reject(err);
+                        });
+                    })
+                    .catch(err => {
+                      reject(err);
+                    });
+                })
+                .catch(err => {
+                  reject(err);
+                });
+            })
+            .catch(err => {
+              reject(err);
+            });
+          // MEMO: Kondisi Program atau bukan
+        } else {
+          // MEMO: Cari Program yg Dinilai
+          ProgramModel.findById({
+            _id: typeProgram
+          })
+            .populate({ path: 'actvityId.nameActivity' })
+            .populate({
+              path: 'actvityId.valueChoice.nameValue',
+              populate: { path: 'keywordsId' }
+            })
+            .populate({ path: 'actvityId.valueChoice.choiceKeyword' })
+            .then(dataProgram => {
+              // MEMO: Variabel Indikator Level
+              let hasilReturn = {};
+              // MEMO: Mencari Data Profil User Yg Mendapat Komen
+              UserModel.findById({ _id: userGetComment })
+                .then(isiGetId => {
+                  // MEMO: Mencari Data Profil User Yg Memberi Komen
+                  UserModel.findById({ _id: userGiftComment })
+                    .then(isiGiftId => {
+                      // MEMO: Akumulasi Indikator Level
+                      hasilReturn = Helper.triggerIndicatorLevel(
+                        isiGetId,
+                        isiGiftId
+                      );
+                      console.log('INDICATOR LEVEL', hasilReturn);
+                      // MEMO: Variabel Mencatat Activity Yg Dinilai
+                      let activityFromProgram = null;
+                      // MEMO: Variabel ...................
+                      let keyWordFromProgram = [];
+                      // MEMO: Variabel ...................
+                      let valueProgramActivity = [];
+                      // MEMO: Variabel Score Impact
+                      console.log(
+                        'KIRIM UNTUK SCORE IMPACT ' +
+                          dataCommenFirst[0] +
+                          ' ' +
+                          rating
+                      );
+                      const rateAcumulate =
+                        Helper.triggerScoreImpact(dataCommenFirst[0], rating) *
+                        hasilReturn;
+                      // MEMO: Variabel ...................
+                      let acumulateRate = {};
+                      // MEMO: Looping Untuk Program Yg Didapat (Keperluan untuk Mencari Activity yg Dipilih Penilai)
+                      for (
+                        let index = 0;
+                        index < dataProgram.actvityId.length;
+                        index++
+                      ) {
+                        // MEMO: Pengkondisian Untuk Mendapatkan Activity
+                        if (
+                          dataProgram.actvityId[index].nameActivity._id ==
+                          activity
+                        ) {
+                          // MEMO: Simpan Value Activity yg ditemukan
+                          activityFromProgram = dataProgram.actvityId[index];
+                        }
+                      }
+                      // MEMO: Looping Activity yg Telah Disimpan
+                      for (
+                        let index = 0;
+                        index < activityFromProgram.valueChoice.length;
+                        index++
+                      ) {
+                        // MEMO: Looping Value Activitynya
+                        for (
+                          let idx = 0;
+                          idx <
+                          activityFromProgram.valueChoice[index].choiceKeyword
+                            .length;
+                          idx++
+                        ) {
+                          // MEMO: Simpan Activity-nya, Kelompokan Berdasarkan Keyword (Jadi Pecahkan Keywordnya)
+                          keyWordFromProgram.push(
+                            activityFromProgram.valueChoice[index]
+                              .choiceKeyword[idx].keywordName
+                          );
+                        }
+                      }
+
+                      // MEMO: Looping Penilaian Awal (Cari Value-nya)
+                      for (
+                        let idx = 0;
+                        idx < dataCommenFirst[0].valueChoice.length;
+                        idx++
+                      ) {
+                        // MEMO: Buat Object Value Baru
+                        let object = {
+                          nameValue:
+                            dataCommenFirst[0].valueChoice[idx].nameValue._id,
+                          choiceKeyword: []
+                        };
+                        // MEMO: Looping Penilaian Awal (Cari Keyword-nya)
+                        for (
+                          let index = 0;
+                          index <
+                          dataCommenFirst[0].valueChoice[idx].choiceKeyword
+                            .length;
+                          index++
+                        ) {
+                          // MEMO: Cari apakah Keyword sama dengan keyword yg dipilih
+                          let indicatorValue = keyWordFromProgram.findIndex(
+                            data => {
+                              return (
+                                data ==
+                                dataCommenFirst[0].valueChoice[idx]
+                                  .choiceKeyword[index].nameKeyword.keywordName
+                              );
+                            }
+                          );
+                          // MEMO: Buat Object Keyword Baru
+                          let objectForValueKeyword = {
+                            nameKeyword:
+                              dataCommenFirst[0].valueChoice[idx].choiceKeyword[
+                                index
+                              ].nameKeyword._id,
+                            valueKeyword: 0
+                          };
+                          // MEMO: Cari Score Impact
+                          var tryToGetScoreImpact =
+                            Helper.triggerScoreImpactForBeAplus(
+                              dataCommenFirst[0].valueChoice[idx].choiceKeyword[
+                                index
+                              ].valueKeyword,
+                              rating
+                            ) * hasilReturn;
+                          // MEMO: Conditional -> Jika data ada pada daftar yg dipilih
+                          if (indicatorValue == -1) {
+                            objectForValueKeyword.valueKeyword =
+                              dataCommenFirst[0].valueChoice[idx].choiceKeyword[
+                                index
+                              ].valueKeyword;
+                            object.choiceKeyword.push(objectForValueKeyword);
+                          } else {
+                            objectForValueKeyword.valueKeyword =
+                              dataCommenFirst[0].valueChoice[idx].choiceKeyword[
+                                index
+                              ].valueKeyword + tryToGetScoreImpact;
+                            object.choiceKeyword.push(objectForValueKeyword);
+                          }
+                        }
+                        valueProgramActivity.push(object);
+                      }
+                      // MEMO: Menambahkan Array Of Object ke Key Penilaian Awal Baru
+                      firstCommentEditPlan.valueChoice = valueProgramActivity;
+                      // MEMO: Variabel Akumulasi Rate dan Value Baru
+                      acumulateRate = Helper.triggerAcumulateRateCommentFirstFromAdmin(
+                        valueProgramActivity
+                      );
+                      // MEMO: Update Komen Pertama
+                      AssessmentModel.findByIdAndUpdate(
+                        firstCommentEditPlan._id,
+                        {
+                          userGetComment: firstCommentEditPlan.userGetComment,
+                          totalRating: acumulateRate.countRate,
+                          totalValueRating: acumulateRate.countAll,
+                          typeProgram: firstCommentEditPlan.typeProgram,
+                          activity: firstCommentEditPlan.activity,
+                          valueChoice: firstCommentEditPlan.valueChoice,
+                          dateComment: firstCommentEditPlan.dateComment,
+                          status: firstCommentEditPlan.status
+                        }
+                      )
+
+                        .then(data => {
+                          // MEMO: Create Komen User
+                          acumulateRate = Helper.triggerAcumulateRateCommentFirstFromAdmin(
+                            valueProgramActivity
+                          );
+                          CommentModel.create({
+                            userGetComment: userGetComment,
+                            userGiftComment: userGiftComment,
+                            rating: acumulateRate.countRate,
+                            originalRate: rating,
+                            valueRating: acumulateRate.countAll,
+                            comment: comment,
+                            dateComment: new Date(),
+                            status: false,
+                            typeAssess: typeAssess,
+                            typeAssessValue: typeAssessValue,
+                            typeAssessKeyword: typeAssessKeyword,
+                            typeProgram: typeProgram,
+                            valueProgramActivity: valueProgramActivity,
+                            activity: activity
+                          })
+
+                            .then(dataCreateCommentSuccess => {
+                              // MEMO: Cari Profil User
+                              // console.log(JSON.stringify(dataCreateCommentSuccess))
+                              UserModel.findById(
+                                dataCreateCommentSuccess.userGetComment
+                              )
+
+                                .then(dataUserGet => {
+                                  // MEMO: Variabel Rate Baru
+                                  let newRate = acumulateRate.countRate;
+                                  // MEMO: Variabel Score Baru
+                                  let newScore = acumulateRate.countAll;
+                                  // MEMO: Update Rate dan Score User yg Dinilai
+                                  UserModel.findByIdAndUpdate(
+                                    dataCreateCommentSuccess.userGetComment,
+                                    {
+                                      rate: newRate,
+                                      score: newScore
+                                    }
+                                  )
+                                    .then(dataUserPost => {
+                                      resolve(dataUserPost);
+                                    })
+                                    .catch(err => {
+                                      reject(err);
+                                    });
+                                })
+                                .catch(err => {
+                                  reject(err);
+                                });
+                            })
+                            .catch(err => {
+                              reject(err);
+                            });
+                        })
+                        .catch(err => {
+                          reject(err);
+                        });
+                    })
+                    .catch(err => {
+                      reject(err);
+                    });
+                })
+                .catch(err => {
+                  reject(err);
+                });
+            })
+            .catch(err => {
+              reject(err);
+            });
+        }
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
 
 module.exports = {
   getUserGiftComment,
@@ -178,5 +619,6 @@ module.exports = {
   updateComment,
   deleteComment,
   postCommentAssessment,
-  getUserDetailComment
+  getUserDetailComment,
+  postNewComment
 };

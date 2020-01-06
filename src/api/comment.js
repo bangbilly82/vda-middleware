@@ -74,6 +74,16 @@ module.exports = {
           tags: ['api', 'Comment']
         },
         handler: getUserDetailComment
+      },
+      {
+        method: 'POST',
+        path: '/post',
+        options: {
+          auth: false,
+          description: 'Create new comment',
+          tags: ['api', 'Comment']
+        },
+        handler: postNewComment
       }
     ]);
   }
@@ -144,6 +154,15 @@ const getUserDetailComment = async (request, h) => {
     const comment = await CommentController.getUserDetailComment(
       request.payload
     );
+    return h.response(comment);
+  } catch (error) {
+    return error;
+  }
+};
+
+const postNewComment = async (request, h) => {
+  try {
+    const comment = await CommentController.postNewComment(request.payload);
     return h.response(comment);
   } catch (error) {
     return error;
