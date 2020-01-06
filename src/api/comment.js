@@ -132,7 +132,7 @@ const getAllUserComment = async (request, h) => {
 const getAllUserGetComment = async (request, h) => {
   try {
     const comment = await CommentController.getAllUserGetComment(
-      request.payload.userGetComment
+      request.payload.userGetComment.userGetComment
     );
     return h.response(comment);
   } catch (error) {
