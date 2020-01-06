@@ -41,10 +41,10 @@ const getAllUserComment = () => {
   ]);
 };
 
-const getAllUserGetComment = userGetComment => {
+const getAllUserGetComment = payload => {
   return new Promise((resolve, reject) => [
     CommentModel.find({
-      userGetComment
+      userGetComment: payload.userGetComment
     })
       .populate('userGetComment')
       .populate('userGiftComment')
