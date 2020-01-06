@@ -612,6 +612,102 @@ const postNewComment = payload => {
   });
 };
 
+const getCommentAssessmentAdmin = payload => {
+  return new Promise((resolve, reject) => {
+    AssessmentModel.find({
+      userGetComment: payload.userGetComment
+    })
+      .populate('userGetComment')
+      // .populate('typeProgram', 'nameProgram')
+      // .populate('activity', 'nameActivity')
+      .populate('valueChoice.nameValue', 'valueName')
+      .populate('valueChoice.choiceKeyword.nameKeyword', 'keywordName')
+      .then(data => {
+        const arrayData = [];
+        for (let index = 0; index < data.length; index++) {
+          let object = {
+            id: data[index]._id,
+            userGetComment: data[index].userGetComment.namaLengkap,
+            totalRating: data[index].totalRating,
+            totalValueRating: data[index].totalValueRating,
+            typeProgram: data[index].typeProgram.nameProgram,
+            activity: data[index].activity.nameActivity,
+            valueChoice: []
+          };
+          for (
+            let idxValue = 0;
+            idxValue < data[index].valueChoice.length;
+            idxValue++
+          ) {
+            let objectValue = {
+              value: data[index].valueChoice[idxValue].nameValue.valueName,
+              keyword: []
+            };
+            for (
+              let idxKey = 0;
+              idxKey < data[index].valueChoice[idxValue].choiceKeyword.length;
+              idxKey++
+            ) {
+              let objectKey = {
+                nameKey:
+                  data[index].valueChoice[idxValue].choiceKeyword[idxKey]
+                    .nameKeyword.keywordName,
+                nilai:
+                  data[index].valueChoice[idxValue].choiceKeyword[idxKey]
+                    .valueKeyword
+              };
+              objectValue.keyword.push(objectKey);
+            }
+            object.valueChoice.push(objectValue);
+          }
+          arrayData.push(object);
+        }
+        resolve(arrayData);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
+
+const editCommentAssessmentAdmin = payload => {
+  return new Promise((resolve, reject) => {
+    const valueChoice =
+      typeof payload.valueChoice === 'string'
+        ? JSON.parse(payload.valueChoice)
+        : payload.valueChoice;
+    const scoreAqumulate = Helper.triggerAcumulateRateCommentFirstFromAdmin(
+      valueChoice
+    );
+
+    AssessmentModel.findByIdAndUpdate(payload.id, {
+      userGetComment: payload.userGetComment,
+      totalRating: scoreAqumulate.countRate,
+      totalValueRating: scoreAqumulate.countAll,
+      typeProgram: payload.typeProgram,
+      activity: payload.activity,
+      valueChoice: valueChoice,
+      dateComment: new Date(),
+      status: true
+    })
+      .then(data => {
+        UserModel.findByIdAndUpdate(payload.userId, {
+          rate: scoreAqumulate.countRate,
+          score: scoreAqumulate.countAll
+        })
+          .then(dataUser => {
+            resolve(data);
+          })
+          .catch(err => {
+            resolve(err);
+          });
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
+};
+
 module.exports = {
   getUserGiftComment,
   getAllUserComment,
@@ -620,5 +716,7 @@ module.exports = {
   deleteComment,
   postCommentAssessment,
   getUserDetailComment,
-  postNewComment
+  postNewComment,
+  getCommentAssessmentAdmin,
+  editCommentAssessmentAdmin
 };

@@ -84,6 +84,26 @@ module.exports = {
           tags: ['api', 'Comment']
         },
         handler: postNewComment
+      },
+      {
+        method: 'POST',
+        path: '/get/admin/createcomment',
+        options: {
+          auth: false,
+          description: 'Create comment from admin',
+          tags: ['api', 'Comment']
+        },
+        handler: getCommentAssessmentAdmin
+      },
+      {
+        method: 'POST',
+        path: '/get/admin/editcomment',
+        options: {
+          auth: false,
+          description: 'Edit comment from admin',
+          tags: ['api', 'Comment']
+        },
+        handler: editCommentAssessmentAdmin
       }
     ]);
   }
@@ -163,6 +183,28 @@ const getUserDetailComment = async (request, h) => {
 const postNewComment = async (request, h) => {
   try {
     const comment = await CommentController.postNewComment(request.payload);
+    return h.response(comment);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getCommentAssessmentAdmin = async (request, h) => {
+  try {
+    const comment = await CommentController.getCommentAssessmentAdmin(
+      request.payload
+    );
+    return h.response(comment);
+  } catch (error) {
+    return error;
+  }
+};
+
+const editCommentAssessmentAdmin = async (request, h) => {
+  try {
+    const comment = await CommentController.editCommentAssessmentAdmin(
+      request.payload
+    );
     return h.response(comment);
   } catch (error) {
     return error;
