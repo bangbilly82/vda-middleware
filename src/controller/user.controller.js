@@ -30,7 +30,12 @@ const registerUser = payload => {
 const getAllUser = () => {
   return new Promise((resolve, reject) => {
     UserModel.find()
-      .then(response => resolve(response))
+      .then(response => {
+        const data = response.filter(item => {
+          return item.role.toLowerCase() !== 'admin';
+        });
+        resolve(data);
+      })
       .catch(error => reject(error));
   });
 };
