@@ -47,24 +47,34 @@ const loginUser = payload => {
     })
       .populate('division')
       .then(response => {
-        if (bcrypt.compareSync(payload.password, response.password)) {
-          const salt = bcrypt.genSaltSync(10);
-          const passwordHasBeenHash = bcrypt.hashSync(response.password, salt);
-          const token = JWTHelper.sign({
-            id: response._id,
-            namaLengkap: response.namaLengkap,
-            password: passwordHasBeenHash,
-            nik: response.nik,
-            level: response.level,
-            email: response.email,
-            role: response.role,
-            rate: response.rate,
-            score: response.score,
-            division: response.division
-          });
-          resolve(token);
+        if (response) {
+          if (bcrypt.compareSync(payload.password, response.password)) {
+            const salt = bcrypt.genSaltSync(10);
+            const passwordHasBeenHash = bcrypt.hashSync(
+              response.password,
+              salt
+            );
+            const token = JWTHelper.sign({
+              id: response._id,
+              namaLengkap: response.namaLengkap,
+              password: passwordHasBeenHash,
+              nik: response.nik,
+              level: response.level,
+              email: response.email,
+              role: response.role,
+              rate: response.rate,
+              score: response.score,
+              division: response.division
+            });
+            resolve(token);
+          } else {
+            resolve('Invalid Crendentials');
+          }
         } else {
-          resolve('Invalid Crendentials');
+          resolve({
+            status: 200,
+            message: 'User not found'
+          });
         }
       })
       .catch(error => {
