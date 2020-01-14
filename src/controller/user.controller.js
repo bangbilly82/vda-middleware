@@ -73,7 +73,7 @@ const loginUser = payload => {
         } else {
           resolve({
             status: 200,
-            message: 'User not found'
+            message: 'data not valid'
           });
         }
       })
