@@ -3,6 +3,7 @@ const AssessmentModel = require('../models/comment/assessment.model');
 const UserModel = require('../models/user/user.model');
 const ProgramModel = require('../models/program/program.model');
 const Helper = require('../utils/Helper');
+const _ = require('lodash');
 
 const getUserGiftComment = userGiftComment => {
   return new Promise((resolve, reject) => {
@@ -53,7 +54,8 @@ const getAllUserGetComment = payload => {
       .populate('typeProgram')
       .populate('activity')
       .then(data => {
-        resolve(data);
+        const sortByDate = _.orderBy(data, ['dateComment'], ['desc']);
+        resolve(sortByDate);
       })
       .catch(err => {
         reject(err);
