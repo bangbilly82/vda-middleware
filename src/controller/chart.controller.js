@@ -50,7 +50,7 @@ const getUserComment = payload => {
                     dataGiftCommentTo[index].userGiftComment._id;
 
                   if (
-                    GiftCommentDivision === GetCommentDivision &&
+                    // GiftCommentDivision === GetCommentDivision &&
                     GiftCommentLevel === GetCommentLevel
                   ) {
                     if (String(GetCommentId) === String(GiftCommentId)) {
@@ -61,26 +61,26 @@ const getUserComment = payload => {
                   }
 
                   if (
-                    GiftCommentDivision === GetCommentDivision &&
+                    // GiftCommentDivision === GetCommentDivision &&
                     GiftCommentLevel < GetCommentLevel
                   ) {
                     subordinate.assess += 1;
                   }
 
                   if (
-                    GiftCommentDivision === GetCommentDivision &&
+                    // GiftCommentDivision === GetCommentDivision &&
                     GiftCommentLevel > GetCommentLevel
                   ) {
                     boss.assess += 1;
                   }
 
-                  if (GiftCommentDivision !== GetCommentDivision) {
-                    if (GiftCommentLevel > GetCommentLevel) {
-                      boss.assess += 1;
-                    } else {
-                      subordinate.assess += 1;
-                    }
-                  }
+                  // if (GiftCommentDivision !== GetCommentDivision) {
+                  //   if (GiftCommentLevel > GetCommentLevel) {
+                  //     boss.assess += 1;
+                  //   } else {
+                  //     subordinate.assess += 1;
+                  //   }
+                  // }
                 }
               }
             }
@@ -88,27 +88,19 @@ const getUserComment = payload => {
             // meloop dapat komen dari mana
             if (JSON.stringify(dataGetCommentFrom) !== '[]') {
               for (let index = 0; index < dataGetCommentFrom.length; index++) {
-                if (
-                  dataGetCommentFrom[index].userGiftComment &&
-                  dataGetCommentFrom[index].userGetComment
+                if ( dataGetCommentFrom[index].userGiftComment && dataGetCommentFrom[index].userGetComment
                 ) {
-                  let GiftCommentDivision = String(
-                    dataGetCommentFrom[index].userGiftComment.division
+                  let GiftCommentDivision = String( dataGetCommentFrom[index].userGiftComment.division
                   );
-                  let GetCommentDivision = String(
-                    dataGetCommentFrom[index].userGetComment.division
+                  let GetCommentDivision = String( dataGetCommentFrom[index].userGetComment.division
                   );
-                  let GiftCommentLevel =
-                    dataGetCommentFrom[index].userGiftComment.level;
-                  let GetCommentLevel =
-                    dataGetCommentFrom[index].userGetComment.level;
-                  let GetCommentId =
-                    dataGetCommentFrom[index].userGetComment._id;
-                  let GiftCommentId =
-                    dataGetCommentFrom[index].userGiftComment._id;
+                  let GiftCommentLevel = dataGetCommentFrom[index].userGiftComment.level;
+                  let GetCommentLevel = dataGetCommentFrom[index].userGetComment.level;
+                  let GetCommentId = dataGetCommentFrom[index].userGetComment._id;
+                  let GiftCommentId = dataGetCommentFrom[index].userGiftComment._id;
 
                   if (
-                    GiftCommentDivision === GetCommentDivision &&
+                    // GiftCommentDivision === GetCommentDivision &&
                     GiftCommentLevel === GetCommentLevel
                   ) {
                     if (String(GetCommentId) === String(GiftCommentId)) {
@@ -119,26 +111,26 @@ const getUserComment = payload => {
                   }
 
                   if (
-                    GiftCommentDivision === GetCommentDivision &&
+                    // GiftCommentDivision === GetCommentDivision &&
                     GiftCommentLevel < GetCommentLevel
                   ) {
                     boss.assessed += 1;
                   }
 
                   if (
-                    GiftCommentDivision === GetCommentDivision &&
+                    // GiftCommentDivision === GetCommentDivision &&
                     GiftCommentLevel > GetCommentLevel
                   ) {
                     subordinate.assessed += 1;
                   }
 
-                  if (GiftCommentDivision !== GetCommentDivision) {
-                    if (GiftCommentLevel > GetCommentLevel) {
-                      boss.assessed += 1;
-                    } else {
-                      subordinate.assessed += 1;
-                    }
-                  }
+                  // if (GiftCommentDivision !== GetCommentDivision) {
+                  //   if (GiftCommentLevel > GetCommentLevel) {
+                  //     boss.assessed += 1;
+                  //   } else {
+                  //     subordinate.assessed += 1;
+                  //   }
+                  // }
                 }
               }
             }
