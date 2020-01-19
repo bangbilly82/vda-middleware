@@ -29,7 +29,8 @@ const registerUser = payload => {
 
 const getAllUser = () => {
   return new Promise((resolve, reject) => {
-    UserModel.find()
+    UserModel.find({})
+      .populate('division')
       .then(response => {
         const data = response.filter(item => {
           return item.role.toLowerCase() !== 'admin';
