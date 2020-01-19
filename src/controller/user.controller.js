@@ -74,10 +74,7 @@ const loginUser = payload => {
             resolve('Invalid Crendentials');
           }
         } else {
-          resolve({
-            status: 200,
-            message: 'data not valid'
-          });
+          resolve('data not valid');
         }
       })
       .catch(error => {
