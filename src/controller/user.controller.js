@@ -7,6 +7,7 @@ const registerUser = payload => {
   return new Promise((resolve, reject) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(payload.password, salt);
+    console.log(payload)
     UserModel.create({
       namaLengkap: payload.namaLengkap,
       nik: payload.nik,
@@ -14,7 +15,7 @@ const registerUser = payload => {
       email: payload.email,
       password: hash,
       role: payload.role || 'user',
-      division: mongoose.Types.ObjectId(),
+      division: payload.division,
       rate: 0,
       score: 0
     })
@@ -32,6 +33,7 @@ const getAllUser = () => {
     UserModel.find({})
       .populate('division')
       .then(response => {
+        console.log(response)
         const data = response.filter(item => {
           return item.role.toLowerCase() !== 'admin';
         });
