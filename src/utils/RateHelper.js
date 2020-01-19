@@ -67,10 +67,16 @@ const scoreImpactForBeAplus = (commentFirst, rating) => {
     countRateComentFirst = 6;
   }
   let countRate = rating;
+  if(countRate === -1){
+    const aqumulateRate = 0 - countRateComentFirst;
+    let scoreImpact = indicatorScoreImpact(aqumulateRate);
+    return scoreImpact;
 
-  const aqumulateRate = countRate - countRateComentFirst;
-  let scoreImpact = indicatorScoreImpact(aqumulateRate);
-  return scoreImpact;
+  }else{
+    const aqumulateRate = countRate - countRateComentFirst
+  let scoreImpact = indicatorScoreImpact(aqumulateRate)
+  return scoreImpact
+  }
 };
 
 const indicatorScoreImpact = value => {
