@@ -174,6 +174,178 @@ const getUserDetailComment = payload => {
       });
   });
 };
+
+const postComment = async payload => {
+  const userGetComment = payload.userGetComment;
+  const userGiftComment = payload.userGiftComment;
+  const rating = payload.rating;
+  const valueRating = payload.valueRating;
+  const comment = payload.comment;
+  const typeAssess = payload.typeAssess;
+  const typeAssessValue = payload.typeAssessValue;
+  const typeAssessKeyword = payload.typeAssessKeyword;
+  const typeProgram = payload.typeProgram;
+  const activity = payload.activity;
+  const firstCommentEditPlan = {};
+  const othersMessage = payload.othersMessage || '';
+
+  // Promise All
+  return Promise.all([
+    getUserGetCommentDetail(userGetComment),
+    getProgramByType(typeProgram),
+    findUserByID(userGetComment),
+    findUserByID(userGiftComment)
+  ]).then(response => {
+    const [userComment, program, userGetComment, userGiftComment] = response;
+
+    if (!_.isEmpty(userComment)) {
+      firstCommentEditPlan._id = userComment[0]._id;
+      firstCommentEditPlan.userGetComment = userComment[0].userGetComment;
+      firstCommentEditPlan.totalRating = 0;
+      firstCommentEditPlan.totalValueRating = 0;
+      firstCommentEditPlan.typeProgram = userComment[0].typeProgram;
+      firstCommentEditPlan.activity = userComment[0].activity;
+      firstCommentEditPlan.valueChoice = [];
+      firstCommentEditPlan.dateComment = new Date();
+      firstCommentEditPlan.status = true;
+      if (typeProgram) {
+        let activityFromProgram = null;
+        let keyWordFromProgram = [];
+        let valueProgramActivity = [];
+        let hasilReturn = {};
+        hasilReturn = Helper.triggerIndicatorLevel(
+          userGetComment,
+          userGiftComment
+        );
+
+        console.time();
+        for (let index = 0; index < program.actvityId.length; index++) {
+          // MEMO: Pengkondisian Untuk Mendapatkan Activity
+          if (program.actvityId[index].nameActivity._id == activity) {
+            // MEMO: Simpan Value Activity yg ditemukan
+            activityFromProgram = program.actvityId[index];
+          }
+        }
+        console.timeEnd();
+
+        if (activityFromProgram) {
+          console.time();
+          for (let i = 0; i < activityFromProgram.valueChoice.length; i++) {
+            // MEMO: Looping Value Activitynya
+            const valueChoiceLength =
+              activityFromProgram.valueChoice[i].choiceKeyword.length;
+            for (let j = 0; j < valueChoiceLength; j++) {
+              // MEMO: Simpan Activity-nya, Kelompokan Berdasarkan Keyword (Jadi Pecahkan Keywordnya)
+              keyWordFromProgram.push(
+                activityFromProgram.valueChoice[i].choiceKeyword[j].keywordName
+              );
+            }
+          }
+          console.timeEnd();
+
+          for (let idx = 0; idx < userComment[0].valueChoice.length; idx++) {
+            const choiceKeywordLength =
+              userComment[0].valueChoice[idx].choiceKeyword.length;
+
+            let object = {
+              nameValue: userComment[0].valueChoice[idx].nameValue._id,
+              choiceKeyword: []
+            };
+
+            for (let idj = 0; idj < choiceKeywordLength; idj++) {
+              const {
+                nameKeyword: { keywordName, _id },
+                valueKeyword
+              } = userComment[0].valueChoice[idx].choiceKeyword[idj];
+
+              let objectForValueKeyword = {
+                nameKeyword: _id,
+                valueKeyword: 0
+              };
+
+              let indicatorValue = keyWordFromProgram.findIndex(data => {
+                return data == keywordName;
+              });
+
+              const tryToGetScoreImpact =
+                Helper.triggerScoreImpactForBeAplus(valueKeyword, rating) *
+                hasilReturn;
+
+              if (indicatorValue == -1) {
+                objectForValueKeyword.valueKeyword = valueKeyword;
+                object.choiceKeyword.push(objectForValueKeyword);
+              } else {
+                objectForValueKeyword.valueKeyword =
+                  valueKeyword + tryToGetScoreImpact;
+                object.choiceKeyword.push(objectForValueKeyword);
+              }
+              valueProgramActivity.push(object);
+            }
+          }
+
+          firstCommentEditPlan.valueChoice = valueProgramActivity;
+          // MEMO: Variabel Akumulasi Rate dan Value Baru
+          acumulateRate = Helper.triggerAcumulateRateCommentFirstFromAdmin(
+            valueProgramActivity
+          );
+
+          return Promise.all([
+            updateFirstComment(acumulateRate, firstCommentEditPlan)
+          ]).then(data => {
+            return data;
+          });
+        } else {
+          return 'tidak ada activity program';
+        }
+      }
+    }
+  });
+};
+
+const updateFirstComment = async (acumulateRate, firstCommentEditPlan) => {
+  const data = await AssessmentModel.findByIdAndUpdate(
+    firstCommentEditPlan._id,
+    {
+      userGetComment: firstCommentEditPlan.userGetComment,
+      totalRating: acumulateRate.countRate,
+      totalValueRating: acumulateRate.countAll,
+      typeProgram: firstCommentEditPlan.typeProgram,
+      activity: firstCommentEditPlan.activity,
+      valueChoice: firstCommentEditPlan.valueChoice,
+      dateComment: firstCommentEditPlan.dateComment,
+      status: firstCommentEditPlan.status
+    }
+  );
+  return data;
+};
+
+const findUserByID = async id => {
+  const user = await UserModel.findById({ _id: id });
+  return user;
+};
+
+const getUserGetCommentDetail = async id => {
+  const userComment = await AssessmentModel.find({
+    userGetComment: id
+  })
+    .populate({ path: 'valueChoice.choiceKeyword.nameKeyword' })
+    .populate({ path: 'valueChoice.nameValue' });
+  return userComment;
+};
+
+const getProgramByType = async type => {
+  const programById = await ProgramModel.findById({
+    _id: type
+  })
+    .populate({ path: 'actvityId.nameActivity' })
+    .populate({
+      path: 'actvityId.valueChoice.nameValue',
+      populate: { path: 'keywordsId' }
+    })
+    .populate({ path: 'actvityId.valueChoice.choiceKeyword' });
+  return programById;
+};
+
 const postNewComment = payload => {
   return new Promise((resolve, reject) => {
     const userGetComment = payload.userGetComment;
@@ -724,5 +896,6 @@ module.exports = {
   getUserDetailComment,
   postNewComment,
   getCommentAssessmentAdmin,
-  editCommentAssessmentAdmin
+  editCommentAssessmentAdmin,
+  postComment
 };
