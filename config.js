@@ -10,7 +10,7 @@ var config = {
   mongodb: {
     $filter: 'env',
     production: {
-      host: 'mongodb://vda:vdaasmin1@ds135335.mlab.com:35335/vda'
+      host: 'mongodb://35.187.237.47:27017/'
     },
     staging: {
       host: 'mongodb://vda:vdaasmin1@ds135335.mlab.com:35335/vda'

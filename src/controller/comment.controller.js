@@ -218,30 +218,22 @@ const postComment = async payload => {
           userGiftComment
         );
 
-        console.time();
         for (let index = 0; index < program.actvityId.length; index++) {
-          // MEMO: Pengkondisian Untuk Mendapatkan Activity
           if (program.actvityId[index].nameActivity._id == activity) {
-            // MEMO: Simpan Value Activity yg ditemukan
             activityFromProgram = program.actvityId[index];
           }
         }
-        console.timeEnd();
 
         if (activityFromProgram) {
-          console.time();
           for (let i = 0; i < activityFromProgram.valueChoice.length; i++) {
-            // MEMO: Looping Value Activitynya
             const valueChoiceLength =
               activityFromProgram.valueChoice[i].choiceKeyword.length;
             for (let j = 0; j < valueChoiceLength; j++) {
-              // MEMO: Simpan Activity-nya, Kelompokan Berdasarkan Keyword (Jadi Pecahkan Keywordnya)
               keyWordFromProgram.push(
                 activityFromProgram.valueChoice[i].choiceKeyword[j].keywordName
               );
             }
           }
-          console.timeEnd();
 
           for (let idx = 0; idx < userComment[0].valueChoice.length; idx++) {
             const choiceKeywordLength =
@@ -282,24 +274,85 @@ const postComment = async payload => {
               valueProgramActivity.push(object);
             }
           }
-
           firstCommentEditPlan.valueChoice = valueProgramActivity;
-          // MEMO: Variabel Akumulasi Rate dan Value Baru
           acumulateRate = Helper.triggerAcumulateRateCommentFirstFromAdmin(
             valueProgramActivity
           );
 
           return Promise.all([
-            updateFirstComment(acumulateRate, firstCommentEditPlan)
-          ]).then(data => {
-            return data;
+            updateFirstComment(acumulateRate, firstCommentEditPlan),
+            updateCommentPost({
+              userGetComment: userGetComment,
+              userGiftComment: userGiftComment,
+              rating: acumulateRate.countRate,
+              originalRate: rating,
+              valueRating: acumulateRate.countAll,
+              comment: comment,
+              dateComment: new Date(),
+              status: false,
+              typeAssess: typeAssess,
+              typeAssessValue: typeAssessValue,
+              typeAssessKeyword: typeAssessKeyword,
+              typeProgram: typeProgram,
+              valueProgramActivity: valueProgramActivity,
+              activity: activity,
+              othersMessage
+            })
+          ]).then(() => {
+            acumulateRate = Helper.triggerAcumulateRateCommentFirstFromAdmin(
+              valueProgramActivity
+            );
+            let newRate = acumulateRate.countRate;
+            let newScore = acumulateRate.countAll;
+            return Promise.all([
+              findUserByID(userGetComment),
+              updateUserByID({
+                userGetComment,
+                newRate,
+                newScore
+              })
+            ]).then(ress => {
+              const [findUserByIDresponse, updateUserByIDResponse] = ress;
+              return updateUserByIDResponse;
+            });
           });
         } else {
           return 'tidak ada activity program';
         }
       }
+    } else {
+      return 'tidak ada comment first';
     }
   });
+};
+
+const updateCommentPost = async payload => {
+  const result = await CommentModel.create({
+    userGetComment: payload.userGetComment,
+    userGiftComment: payload.userGiftComment,
+    rating: payload.rating,
+    originalRate: payload.originalRate,
+    valueRating: payload.valueRating,
+    comment: payload.comment,
+    dateComment: new Date(),
+    status: false,
+    typeAssess: payload.typeAssess,
+    typeAssessValue: payload.typeAssessValue,
+    typeAssessKeyword: payload.typeAssessKeyword,
+    typeProgram: payload.typeProgram,
+    valueProgramActivity: payload.valueProgramActivity,
+    activity: payload.activity,
+    othersMessage: payload.othersMessage
+  });
+  return result;
+};
+
+const updateUserByID = async payload => {
+  const user = await UserModel.findByIdAndUpdate(payload.userGetComment, {
+    rate: payload.newRate,
+    score: payload.newScore
+  });
+  return user;
 };
 
 const updateFirstComment = async (acumulateRate, firstCommentEditPlan) => {

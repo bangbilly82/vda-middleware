@@ -182,8 +182,8 @@ const getUserDetailComment = async (request, h) => {
 
 const postNewComment = async (request, h) => {
   try {
-    // const comment = await CommentController.postNewComment(request.payload);
-    const comment = await CommentController.postComment(request.payload);
+    const comment = await CommentController.postNewComment(request.payload);
+    // const comment = await CommentController.postComment(request.payload);
     return h.response(comment);
   } catch (error) {
     return error;
