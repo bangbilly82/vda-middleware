@@ -1,89 +1,95 @@
 const initServerRoute = {
   name: 'initial-route',
   version: '1.0.0',
-  register: server => {
+  register: (server) => {
     server.route([
       {
         method: 'GET',
         path: '/',
         options: {
-          auth: false
+          auth: false,
         },
         handler: () => {
           return {
             status: {
               code: 200,
-              message: 'Server Running...'
-            }
+              message: 'Server Running...',
+            },
           };
-        }
-      }
+        },
+      },
     ]);
-  }
+  },
 };
 
 module.exports = [
   {
-    plugin: initServerRoute
+    plugin: initServerRoute,
   },
   {
     plugin: require('./src/api/user'),
     routes: {
-      prefix: '/api/user'
-    }
+      prefix: '/api/user',
+    },
   },
   {
     plugin: require('./src/api/division'),
     routes: {
-      prefix: '/api/division'
-    }
+      prefix: '/api/division',
+    },
   },
   {
     plugin: require('./src/api/rating'),
     routes: {
-      prefix: '/api/rating'
-    }
+      prefix: '/api/rating',
+    },
   },
   {
     plugin: require('./src/api/program'),
     routes: {
-      prefix: '/api/program'
-    }
+      prefix: '/api/program',
+    },
   },
   {
     plugin: require('./src/api/activity'),
     routes: {
-      prefix: '/api/activity'
-    }
+      prefix: '/api/activity',
+    },
   },
   {
     plugin: require('./src/api/keyword'),
     routes: {
-      prefix: '/api/keyword'
-    }
+      prefix: '/api/keyword',
+    },
   },
   {
     plugin: require('./src/api/value'),
     routes: {
-      prefix: '/api/value'
-    }
+      prefix: '/api/value',
+    },
   },
   {
     plugin: require('./src/api/graphic'),
     routes: {
-      prefix: '/api/graphic'
-    }
+      prefix: '/api/graphic',
+    },
   },
   {
     plugin: require('./src/api/comment'),
     routes: {
-      prefix: '/api/comment'
-    }
+      prefix: '/api/comment',
+    },
   },
   {
     plugin: require('./src/api/chart'),
     routes: {
-      prefix: '/api/comment'
-    }
-  }
+      prefix: '/api/comment',
+    },
+  },
+  {
+    plugin: require('./src/api/v2/users'),
+    routes: {
+      prefix: '/api/v2/user',
+    },
+  },
 ];
