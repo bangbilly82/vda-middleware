@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'API',
+      name: 'VDA API',
       script: 'server.js',
       args: 'one two',
       instances: 1,
@@ -9,14 +9,11 @@ module.exports = {
       watch: false,
       max_memory_restart: '1G',
       env: {
-        NODE_ENV: 'dev'
-      },
-      env_staging: {
-        NODE_ENV: 'staging'
+        NODE_ENV: 'dev',
       },
       env_production: {
-        NODE_ENV: 'production'
-      }
-    }
-  ]
+        NODE_ENV: 'production',
+      },
+    },
+  ],
 };
