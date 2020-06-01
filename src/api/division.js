@@ -3,7 +3,7 @@ const DivisionController = require('../controller/division.controller');
 module.exports = {
   name: 'division-api',
   version: '1.0.0',
-  register: server => {
+  register: (server) => {
     server.route([
       {
         method: 'POST',
@@ -11,9 +11,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Create new division',
-          tags: ['api', 'Division']
+          tags: ['api', 'Division'],
         },
-        handler: createDivision
+        handler: createDivision,
       },
       {
         method: 'POST',
@@ -21,9 +21,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Get division',
-          tags: ['api', 'Division']
+          tags: ['api', 'Division'],
         },
-        handler: getDivision
+        handler: getDivision,
       },
       {
         method: 'GET',
@@ -31,9 +31,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Get all division',
-          tags: ['api', 'Division']
+          tags: ['api', 'Division'],
         },
-        handler: getAllDivision
+        handler: getAllDivision,
       },
       {
         method: 'POST',
@@ -41,9 +41,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Get all division',
-          tags: ['api', 'Division']
+          tags: ['api', 'Division'],
         },
-        handler: getDivisionByUserID
+        handler: getDivisionByUserID,
       },
       {
         method: 'POST',
@@ -51,9 +51,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Get all division',
-          tags: ['api', 'Division']
+          tags: ['api', 'Division'],
         },
-        handler: getDivisionByHeadUserID
+        handler: getDivisionByHeadUserID,
       },
       {
         method: 'PUT',
@@ -61,9 +61,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Get all division',
-          tags: ['api', 'Division']
+          tags: ['api', 'Division'],
         },
-        handler: updateDivision
+        handler: updateDivision,
       },
       {
         method: 'DELETE',
@@ -71,12 +71,12 @@ module.exports = {
         options: {
           auth: false,
           description: 'Get all division',
-          tags: ['api', 'Division']
+          tags: ['api', 'Division'],
         },
-        handler: deleteDivision
-      }
+        handler: deleteDivision,
+      },
     ]);
-  }
+  },
 };
 
 const createDivision = async (request, h) => {
@@ -91,16 +91,9 @@ const createDivision = async (request, h) => {
 
 const getDivision = async (request, h) => {
   try {
-    const division = await DivisionController.getDivision(request.payload.division);
-    return h.response(division);
-  } catch (error) {
-    return error;
-  }
-};
-
-const getAllDivision = async (request, h) => {
-  try {
-    const division = await DivisionController.getAllDivision();
+    const division = await DivisionController.getDivision(
+      request.payload.division
+    );
     return h.response(division);
   } catch (error) {
     return error;
@@ -109,7 +102,9 @@ const getAllDivision = async (request, h) => {
 
 const getDivisionByUserID = async (request, h) => {
   try {
-    const division = await DivisionController.getDivisionByDivisionUserID(request.payload.divisionUserId);
+    const division = await DivisionController.getDivisionByDivisionUserID(
+      request.payload.divisionUserId
+    );
     return h.response(division);
   } catch (error) {
     return error;
@@ -118,7 +113,9 @@ const getDivisionByUserID = async (request, h) => {
 
 const getDivisionByHeadUserID = async (request, h) => {
   try {
-    const division = await DivisionController.getDivisionByHeadUserID(request.payload.userIdHead);
+    const division = await DivisionController.getDivisionByHeadUserID(
+      request.payload.userIdHead
+    );
     return h.response(division);
   } catch (error) {
     return error;
@@ -127,7 +124,9 @@ const getDivisionByHeadUserID = async (request, h) => {
 
 const updateDivision = async (request, h) => {
   try {
-    const division = await DivisionController.updateDivisionByID(request.payload);
+    const division = await DivisionController.updateDivisionByID(
+      request.payload
+    );
     return h.response(division);
   } catch (error) {
     return error;
@@ -136,7 +135,21 @@ const updateDivision = async (request, h) => {
 
 const deleteDivision = async (request, h) => {
   try {
-    const division = await DivisionController.deleteDivisionByID(request.payload);
+    const division = await DivisionController.deleteDivisionByID(
+      request.payload
+    );
+    return h.response(division);
+  } catch (error) {
+    return error;
+  }
+};
+
+// Migrated API to new DB
+
+const getAllDivision = async (request, h) => {
+  try {
+    // const division = await DivisionController.getAllDivision();
+    const division = await DivisionController.getDepartment();
     return h.response(division);
   } catch (error) {
     return error;

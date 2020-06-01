@@ -92,4 +92,28 @@ module.exports = [
       prefix: '/api/v2/user',
     },
   },
+  {
+    plugin: require('./src/api/v2/activity'),
+    routes: {
+      prefix: '/api/v2/activity',
+    },
+  },
+  {
+    plugin: require('./src/api/v2/department'),
+    routes: {
+      prefix: '/api/v2/department',
+    },
+  },
+  {
+    plugin: require('./src/api/v2/value'),
+    routes: {
+      prefix: '/api/v2/value',
+    },
+  },
+  {
+    plugin: require('./src/api/v2/keyword'),
+    routes: {
+      prefix: '/api/v2/keyword',
+    },
+  },
 ];

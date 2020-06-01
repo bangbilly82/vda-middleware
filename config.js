@@ -16,7 +16,8 @@ var config = {
       host: 'mongodb://vda:vdaasmin1@ds135335.mlab.com:35335/vda',
     },
     $default: {
-      host: 'mongodb://127.0.0.1:27017/',
+      // host: 'mongodb://127.0.0.1:27017/',
+      host: 'mongodb://vda:vdaasmin1@ds135335.mlab.com:35335/vda',
     },
   },
   swaggerOptions: {
@@ -65,7 +66,31 @@ var config = {
     $default: {
       host: '127.0.0.1',
       user: 'root',
-      password: '',
+      password: 'password',
+      database: 'asmin_db',
+      port: 3306,
+    },
+  },
+  mysql: {
+    $filter: 'env',
+    production: {
+      host: '127.0.0.1',
+      user: 'root',
+      password: 'asmin2020',
+      database: 'asmin_db',
+      port: 3306,
+    },
+    dev: {
+      host: '127.0.0.1',
+      user: 'root',
+      password: 'asmin2020',
+      database: 'asmin_db',
+      port: 3306,
+    },
+    $default: {
+      host: '127.0.0.1',
+      user: 'root',
+      password: 'password',
       database: 'asmin_db',
       port: 3306,
     },

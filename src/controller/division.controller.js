@@ -1,16 +1,17 @@
 const DivisionModel = require('../models/division/division.model');
+const DepartmentDB = require('../database/department_db');
 
-const createDivision = payload => {
+const createDivision = (payload) => {
   return new Promise((resolve, reject) => {
     DivisionModel.create({
       division: payload.division,
       userIdHead: payload.userIdHead ? payload.userIdHead : null,
-      divisionUserId: payload.divisionUserId ? payload.divisionUserId : null
+      divisionUserId: payload.divisionUserId ? payload.divisionUserId : null,
     })
-      .then(data => {
+      .then((data) => {
         resolve(data);
       })
-      .catch(error => {
+      .catch((error) => {
         reject(error);
       });
   });
@@ -19,82 +20,122 @@ const createDivision = payload => {
 const getAllDivision = () => {
   return new Promise((resolve, reject) => {
     DivisionModel.find()
-      .then(response => resolve(response))
-      .catch(error => reject(error));
+      .then((response) => resolve(response))
+      .catch((error) => reject(error));
   });
 };
 
-const getDivision = division => {
+const getDivision = (division) => {
   return new Promise((resolve, reject) => {
     DivisionModel.find({
-      division
+      division,
     })
       .populate('divisionUserId')
       .populate('userIdHead')
-      .then(data => {
+      .then((data) => {
         resolve(data);
       })
-      .catch(error => {
+      .catch((error) => {
         reject(error);
       });
   });
 };
 
-const getDivisionByDivisionUserID = divisionUserId => {
+const getDivisionByDivisionUserID = (divisionUserId) => {
   return new Promise((resolve, reject) => {
     DivisionModel.find({
-      divisionUserId
+      divisionUserId,
     })
       .populate('divisionUserId')
       .populate('userIdHead')
-      .then(data => {
+      .then((data) => {
         resolve(data);
       })
-      .catch(error => {
+      .catch((error) => {
         reject(error);
       });
   });
 };
 
-const getDivisionByHeadUserID = userIdHead => {
+const getDivisionByHeadUserID = (userIdHead) => {
   return new Promise((resolve, reject) => {
     DivisionModel.find({
-      userIdHead
+      userIdHead,
     })
       .populate('divisionUserId')
       .populate('userIdHead')
-      .then(data => {
+      .then((data) => {
         resolve(data);
       })
-      .catch(error => {
+      .catch((error) => {
         reject(error);
       });
   });
 };
 
-const updateDivisionByID = payload => {
+const updateDivisionByID = (payload) => {
   return new Promise((resolve, reject) => {
     DivisionModel.findByIdAndUpdate(payload.id, {
       division: payload.division,
       userIdHead: payload.userIdHead ? payload.userIdHead : null,
-      divisionUserId: payload.divisionUserId ? payload.divisionUserId : null
+      divisionUserId: payload.divisionUserId ? payload.divisionUserId : null,
     })
-      .then(data => {
+      .then((data) => {
         resolve(data);
       })
-      .catch(error => {
+      .catch((error) => {
         reject(error);
       });
   });
 };
 
-const deleteDivisionByID = payload => {
+const deleteDivisionByID = (payload) => {
   return new Promise((resolve, reject) => {
     DivisionModel.findByIdAndDelete(payload.id)
-      .then(data => {
+      .then((data) => {
         resolve(data);
       })
-      .catch(error => {
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+// Migrated API to new DB
+
+const saveDepartment = (payload) => {
+  return new Promise((resolve, reject) => {
+    const { division, userIdHead, divisionUserId } = payload;
+    const data = {
+      division: division,
+      userIdHead: userIdHead ? userIdHead : null,
+      divisionUserId: divisionUserId ? divisionUserId : null,
+    };
+    DepartmentDB.saveDepartment(data)
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const getDepartment = () => {
+  return new Promise((resolve, reject) => {
+    DepartmentDB.getDepartment()
+      .then((result) => {
+        const parseResponse = result.map((item) => {
+          return {
+            divisionUserId: null,
+            userIdHead: null,
+            _id: item.id,
+            division: item.name,
+          };
+        });
+        resolve(parseResponse);
+      })
+      .catch((error) => {
         reject(error);
       });
   });
@@ -107,5 +148,8 @@ module.exports = {
   getDivisionByDivisionUserID,
   getDivisionByHeadUserID,
   updateDivisionByID,
-  deleteDivisionByID
+  deleteDivisionByID,
+
+  saveDepartment,
+  getDepartment,
 };

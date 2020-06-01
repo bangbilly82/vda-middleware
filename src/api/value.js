@@ -3,7 +3,7 @@ const ValueController = require('../controller/value.controller');
 module.exports = {
   name: 'value-api',
   version: '1.0.0',
-  register: server => {
+  register: (server) => {
     server.route([
       {
         method: 'POST',
@@ -11,9 +11,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Create new value',
-          tags: ['api', 'Value']
+          tags: ['api', 'Value'],
         },
-        handler: createValue
+        handler: createValue,
       },
       {
         method: 'GET',
@@ -21,9 +21,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Get all value',
-          tags: ['api', 'Value']
+          tags: ['api', 'Value'],
         },
-        handler: getAllValue
+        handler: getAllValue,
       },
       {
         method: 'PUT',
@@ -31,9 +31,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Update value',
-          tags: ['api', 'Value']
+          tags: ['api', 'Value'],
         },
-        handler: updateValue
+        handler: updateValue,
       },
       {
         method: 'DELETE',
@@ -41,26 +41,17 @@ module.exports = {
         options: {
           auth: false,
           description: 'Delete value',
-          tags: ['api', 'Value']
+          tags: ['api', 'Value'],
         },
-        handler: deleteValue
-      }
+        handler: deleteValue,
+      },
     ]);
-  }
+  },
 };
 
 const createValue = async (request, h) => {
   try {
     const value = await ValueController.createValue(request.payload);
-    return h.response(value);
-  } catch (error) {
-    return error;
-  }
-};
-
-const getAllValue = async (request, h) => {
-  try {
-    const value = await ValueController.getAllValue();
     return h.response(value);
   } catch (error) {
     return error;
@@ -79,6 +70,18 @@ const updateValue = async (request, h) => {
 const deleteValue = async (request, h) => {
   try {
     const value = await ValueController.deleteValue(request.payload);
+    return h.response(value);
+  } catch (error) {
+    return error;
+  }
+};
+
+// Migrated API to new DB
+
+const getAllValue = async (request, h) => {
+  try {
+    // const value = await ValueController.getAllValue();
+    const value = await ValueController.getValue();
     return h.response(value);
   } catch (error) {
     return error;

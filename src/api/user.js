@@ -3,7 +3,7 @@ const UserController = require('../controller/user.controller');
 module.exports = {
   name: 'user-api',
   version: '1.0.0',
-  register: server => {
+  register: (server) => {
     server.route([
       {
         method: 'POST',
@@ -11,9 +11,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Register new user',
-          tags: ['api', 'User']
+          tags: ['api', 'User'],
         },
-        handler: registerUser
+        handler: registerUser,
       },
       {
         method: 'GET',
@@ -21,9 +21,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Get all user',
-          tags: ['api', 'User']
+          tags: ['api', 'User'],
         },
-        handler: getAllUser
+        handler: getAllUser,
       },
       {
         method: 'POST',
@@ -31,9 +31,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Login user',
-          tags: ['api', 'User']
+          tags: ['api', 'User'],
         },
-        handler: loginUser
+        handler: loginUser,
       },
       {
         method: 'PUT',
@@ -41,9 +41,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Forgot user password',
-          tags: ['api', 'User']
+          tags: ['api', 'User'],
         },
-        handler: forgotPassword
+        handler: forgotPassword,
       },
       {
         method: 'PUT',
@@ -51,9 +51,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Change user password',
-          tags: ['api', 'User']
+          tags: ['api', 'User'],
         },
-        handler: changePassword
+        handler: changePassword,
       },
       {
         method: 'POST',
@@ -61,9 +61,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Get user by NIK',
-          tags: ['api', 'User']
+          tags: ['api', 'User'],
         },
-        handler: getUserByNik
+        handler: getUserByNik,
       },
       {
         method: 'DELETE',
@@ -71,40 +71,12 @@ module.exports = {
         options: {
           auth: false,
           description: 'Delete user by NIK',
-          tags: ['api', 'User']
+          tags: ['api', 'User'],
         },
-        handler: deleteUser
-      }
+        handler: deleteUser,
+      },
     ]);
-  }
-};
-
-const registerUser = async (request, h) => {
-  try {
-    const payload = request.payload;
-    const register = await UserController.registerUser(payload);
-    return h.response(register);
-  } catch (error) {
-    return error;
-  }
-};
-
-const getAllUser = async (request, h) => {
-  try {
-    const users = await UserController.getAllUser();
-    return h.response(users);
-  } catch (error) {
-    return error;
-  }
-};
-
-const loginUser = async (request, h) => {
-  try {
-    const users = await UserController.loginUser(request.payload);
-    return h.response(users);
-  } catch (error) {
-    return error;
-  }
+  },
 };
 
 const forgotPassword = async (request, h) => {
@@ -138,6 +110,39 @@ const deleteUser = async (request, h) => {
   try {
     const user = await UserController.deleteUser(request.payload.nik);
     return h.response(user);
+  } catch (error) {
+    return error;
+  }
+};
+
+// Migrated API to new DB
+
+const loginUser = async (request, h) => {
+  try {
+    // const users = await UserController.loginUser(request.payload);
+    const users = await UserController.login(request.payload);
+    return h.response(users);
+  } catch (error) {
+    return error;
+  }
+};
+
+const registerUser = async (request, h) => {
+  try {
+    const payload = request.payload;
+    // const register = await UserController.registerUser(payload);
+    const register = await UserController.saveUser(payload);
+    return h.response(register);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getAllUser = async (request, h) => {
+  try {
+    // const users = await UserController.getAllUser();
+    const users = await UserController.getAllActiveUser();
+    return h.response(users);
   } catch (error) {
     return error;
   }

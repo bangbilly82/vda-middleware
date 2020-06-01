@@ -7,10 +7,11 @@ const HapiSwagger = require('hapi-swagger');
 const Config = require('./config');
 const Routes = require('./routes');
 const PostAuthHandler = require('./src/plugins/postAuthHandler');
+const OnRequestHandler = require('./src/plugins/onRequestHandler');
 
 const Swagger = {
   plugin: HapiSwagger,
-  options: Config.get('/swaggerOptions')
+  options: Config.get('/swaggerOptions'),
 };
 
 const Logger = {
@@ -21,27 +22,27 @@ const Logger = {
         {
           module: '@hapi/good-squeeze',
           name: 'Squeeze',
-          args: [{ log: '*', response: '*', error: '*' }]
+          args: [{ log: '*', response: '*', error: '*' }],
         },
         {
-          module: '@hapi/good-console'
+          module: '@hapi/good-console',
         },
-        'stdout'
-      ]
-    }
-  }
+        'stdout',
+      ],
+    },
+  },
 };
 
 const HapiAuthJWT = {
-  plugin: require('hapi-auth-jwt2')
+  plugin: require('hapi-auth-jwt2'),
 };
 
 const Auth = {
-  plugin: require('./src/authentication/auth')
+  plugin: require('./src/authentication/auth'),
 };
 
 const GuestAuth = {
-  plugin: require('./src/authentication/guest')
+  plugin: require('./src/authentication/guest'),
 };
 
 const manifest = {
@@ -49,10 +50,10 @@ const manifest = {
     port: process.env.PORT || 5000,
     routes: {
       files: {
-        relativeTo: Path.join(__dirname, 'public')
+        relativeTo: Path.join(__dirname, 'public'),
       },
-      cors: true
-    }
+      cors: true,
+    },
   },
   register: {
     plugins: [
@@ -64,13 +65,14 @@ const manifest = {
       Auth,
       GuestAuth,
       PostAuthHandler,
-      ...Routes
-    ]
-  }
+      OnRequestHandler,
+      ...Routes,
+    ],
+  },
 };
 
 const options = {
-  relativeTo: __dirname
+  relativeTo: __dirname,
 };
 
 module.exports = () => {

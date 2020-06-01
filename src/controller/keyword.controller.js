@@ -1,14 +1,15 @@
 const KeywordModel = require('../models/keyword/keyword.model');
+const KeywordDB = require('../database/keyword_db');
 
-const createKeyword = payload => {
+const createKeyword = (payload) => {
   return new Promise((resolve, reject) => {
     KeywordModel.create({
-      keywordName: payload.keywordName
+      keywordName: payload.keywordName,
     })
-      .then(data => {
+      .then((data) => {
         resolve(data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -17,51 +18,89 @@ const createKeyword = payload => {
 const getAllKeyword = () => {
   return new Promise((resolve, reject) => {
     KeywordModel.find({})
-      .then(data => {
+      .then((data) => {
         resolve(data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
 };
 
-const getKeywordByName = keywordName => {
+const getKeywordByName = (keywordName) => {
   return new Promise((resolve, reject) => {
     KeywordModel.find({
-      keywordName
+      keywordName,
     })
-      .then(data => {
+      .then((data) => {
         resolve(data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
 };
 
-const updateKeyword = payload => {
+const updateKeyword = (payload) => {
   return new Promise((resolve, reject) => {
     KeywordModel.findByIdAndUpdate(payload.id, {
-      keywordName: payload.keywordName
+      keywordName: payload.keywordName,
     })
-      .then(data => {
+      .then((data) => {
         resolve(data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
 };
 
-const deleteKeyword = payload => {
+const deleteKeyword = (payload) => {
   return new Promise((resolve, reject) => {
     KeywordModel.findByIdAndDelete(payload.id)
-      .then(data => {
+      .then((data) => {
         resolve(data);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
+      });
+  });
+};
+
+// Migrated API to new DB
+
+const saveKeyword = (payload) => {
+  return new Promise((resolve, reject) => {
+    KeywordDB.saveKeyword(payload)
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const getKeyword = () => {
+  return new Promise((resolve, reject) => {
+    KeywordDB.getKeyword()
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const getKeywordByValueID = (value_id) => {
+  return new Promise((resolve, reject) => {
+    KeywordDB.getKeywordByValueID(value_id)
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((error) => {
+        reject(error);
       });
   });
 };
@@ -71,5 +110,9 @@ module.exports = {
   getAllKeyword,
   getKeywordByName,
   updateKeyword,
-  deleteKeyword
+  deleteKeyword,
+
+  saveKeyword,
+  getKeyword,
+  getKeywordByValueID,
 };

@@ -3,7 +3,7 @@ const ActivityController = require('../controller/activity.controller');
 module.exports = {
   name: 'activity-api',
   version: '1.0.0',
-  register: server => {
+  register: (server) => {
     server.route([
       {
         method: 'POST',
@@ -11,9 +11,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Create new activity',
-          tags: ['api', 'Activity']
+          tags: ['api', 'Activity'],
         },
-        handler: createActivity
+        handler: createActivity,
       },
       {
         method: 'POST',
@@ -21,9 +21,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Create new activity',
-          tags: ['api', 'Activity']
+          tags: ['api', 'Activity'],
         },
-        handler: getActivityByName
+        handler: getActivityByName,
       },
       {
         method: 'GET',
@@ -31,9 +31,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Get all activity',
-          tags: ['api', 'Activity']
+          tags: ['api', 'Activity'],
         },
-        handler: getAllActivity
+        handler: getAllActivity,
       },
       {
         method: 'POST',
@@ -41,9 +41,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Get activity by user incharge ID',
-          tags: ['api', 'Activity']
+          tags: ['api', 'Activity'],
         },
-        handler: getActivityByUserInchargeID
+        handler: getActivityByUserInchargeID,
       },
       {
         method: 'PUT',
@@ -51,9 +51,9 @@ module.exports = {
         options: {
           auth: false,
           description: 'Update activity',
-          tags: ['api', 'Activity']
+          tags: ['api', 'Activity'],
         },
-        handler: updateActivity
+        handler: updateActivity,
       },
       {
         method: 'DELETE',
@@ -61,21 +61,12 @@ module.exports = {
         options: {
           auth: false,
           description: 'Delete activity',
-          tags: ['api', 'Activity']
+          tags: ['api', 'Activity'],
         },
-        handler: deleteActivity
-      }
+        handler: deleteActivity,
+      },
     ]);
-  }
-};
-
-const createActivity = async (request, h) => {
-  try {
-    const activity = await ActivityController.createActivity(request.payload);
-    return h.response(activity);
-  } catch (error) {
-    return error;
-  }
+  },
 };
 
 const getActivityByName = async (request, h) => {
@@ -83,15 +74,6 @@ const getActivityByName = async (request, h) => {
     const activity = await ActivityController.getActivityByName(
       request.payload.nameActivity
     );
-    return h.response(activity);
-  } catch (error) {
-    return error;
-  }
-};
-
-const getAllActivity = async (request, h) => {
-  try {
-    const activity = await ActivityController.getAllActivity();
     return h.response(activity);
   } catch (error) {
     return error;
@@ -109,18 +91,40 @@ const getActivityByUserInchargeID = async (request, h) => {
   }
 };
 
-const updateActivity = async (request, h) => {
+const deleteActivity = async (request, h) => {
   try {
-    const activity = await ActivityController.updateActivity(request.payload);
+    const activity = await ActivityController.deleteActivity(request.payload);
     return h.response(activity);
   } catch (error) {
     return error;
   }
 };
 
-const deleteActivity = async (request, h) => {
+// Migrated API to new DB
+
+const createActivity = async (request, h) => {
   try {
-    const activity = await ActivityController.deleteActivity(request.payload);
+    // const activity = await ActivityController.createActivity(request.payload);
+    const activity = await ActivityController.saveActivity(request.payload);
+    return h.response(activity);
+  } catch (error) {
+    return error;
+  }
+};
+
+const getAllActivity = async (request, h) => {
+  try {
+    // const activity = await ActivityController.getAllActivity();
+    const activity = await ActivityController.getActivity();
+    return h.response(activity);
+  } catch (error) {
+    return error;
+  }
+};
+
+const updateActivity = async (request, h) => {
+  try {
+    const activity = await ActivityController.updateActivity(request.payload);
     return h.response(activity);
   } catch (error) {
     return error;

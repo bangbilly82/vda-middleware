@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const UserModel = require('../models/user/user.model');
 const JWTHelper = require('../authentication/jwtHelper');
-const UserDB = require('../database/users');
+const UserDB = require('../database/users_db');
 
 const registerUser = (payload) => {
   return new Promise((resolve, reject) => {
@@ -34,7 +34,6 @@ const getAllUser = () => {
     UserModel.find({})
       .populate('division')
       .then((response) => {
-        console.log(response);
         const data = response.filter((item) => {
           return item.role.toLowerCase() !== 'admin';
         });
@@ -164,13 +163,113 @@ const deleteUser = (nik) => {
   });
 };
 
+// Migrated to DB
+
 const getAllActiveUser = () => {
   return new Promise((resolve, reject) => {
     UserDB.getAllActiveUser()
       .then((result) => {
+        const parseResponse = result.map((item) => {
+          return {
+            _id: item.id,
+            namaLengkap: item.name,
+            nik: item.NIK,
+            level: item.level,
+            email: item.email,
+            password: item.password,
+            role: 'user',
+            rate: 0,
+            score: 0,
+            division: {
+              divisionUserId: null,
+              userIdHead: null,
+              _id: item.division_id,
+              division: item.division,
+            },
+          };
+        });
+        resolve(parseResponse);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const getUserByID = (id) => {
+  return new Promise((resolve, reject) => {
+    UserDB.getUserByID(id)
+      .then((result) => {
+        const parseResponse = result.map((item) => {
+          return {
+            _id: item.id,
+            namaLengkap: item.name,
+            nik: item.nik,
+            level: item.level,
+            email: item.email,
+            password: item.password,
+            role: 'user',
+            rate: 0,
+            score: 0,
+          };
+        });
+        resolve(parseResponse);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const saveUser = (payload) => {
+  return new Promise((resolve, reject) => {
+    const { nik, namaLengkap, email, level, division, password } = payload;
+    const salt = bcrypt.genSaltSync(10);
+    const hashPassword = bcrypt.hashSync(password, salt);
+    const data = {
+      division,
+      email,
+      level,
+      namaLengkap,
+      nik,
+      password: hashPassword,
+    };
+    UserDB.saveUser(data)
+      .then((result) => {
         resolve(result);
       })
       .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+const login = (payload) => {
+  return new Promise((resolve, reject) => {
+    const { nik, password } = payload;
+    UserDB.getUserByNIK(nik)
+      .then((result) => {
+        const isPasswordValid = bcrypt.compareSync(
+          password,
+          result[0].password
+        );
+        if (isPasswordValid) {
+          const salt = bcrypt.genSaltSync(10);
+          const passwordHasBeenHash = bcrypt.hashSync(result[0].password, salt);
+          const token = JWTHelper.sign({
+            id: result[0].id,
+            namaLengkap: result[0].namaLengkap,
+            password: passwordHasBeenHash,
+            nik: result[0].nik,
+            level: result[0].level,
+            email: result[0].email,
+          });
+          return resolve(token);
+        }
+        resolve('Invalid Crendentials');
+      })
+      .catch((error) => {
+        console.log(error, '===== cacacacac');
         reject(error);
       });
   });
@@ -184,5 +283,9 @@ module.exports = {
   changePassword,
   getUserByNik,
   deleteUser,
+
   getAllActiveUser,
+  getUserByID,
+  saveUser,
+  login,
 };
